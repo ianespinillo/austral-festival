@@ -1,0 +1,43 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: folk-festival-mongo
+    restart: unless-stopped
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: folk_festival
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'try { if (rs.status().ok) quit(0) } catch (e) { if (e.codeName === \"NotYetInitialized\") { try { rs.initiate() } catch (e2) { quit(1) } quit(0) } quit(1) }'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  web:
+    build: .
+    container_name: folk-festival-web
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      # Adentro de la red de compose, Mongo se llama "mongodb"
+      DATABASE_URL: "mongodb://mongodb:27017/folk_festival?replicaSet=rs0"
+      MP_ACCESS_TOKEN: "${MP_ACCESS_TOKEN:-TEST-xxx}"
+      MP_PUBLIC_KEY: "${MP_PUBLIC_KEY:-TEST-xxx}"
+      MP_WEBHOOK_SECRET: "${MP_WEBHOOK_SECRET:-xxx}"
+      NEXT_PUBLIC_APP_URL: "${NEXT_PUBLIC_APP_URL:-http://localhost:3000}"
+      SMTP_HOST: "${SMTP_HOST:-}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_USER: "${SMTP_USER:-}"
+      SMTP_PASS: "${SMTP_PASS:-}"
+      EMAIL_FROM: "${EMAIL_FROM:-Festival Folk Austral}"
+      STAFF_PASSWORD: "${STAFF_PASSWORD:-peña-demo}"
+
+volumes:
+  mongo_data:

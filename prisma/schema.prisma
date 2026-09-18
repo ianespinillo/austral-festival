@@ -1,0 +1,79 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  date        DateTime
+  venue       String
+  createdAt   DateTime     @default(now())
+  ticketTiers TicketTier[]
+}
+
+model TicketTier {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  eventId   String   @db.ObjectId
+  event     Event    @relation(fields: [eventId], references: [id])
+  name      String
+  price     Float
+  maxStock  Int
+  soldCount Int      @default(0)
+  isActive  Boolean  @default(true)
+  purchases Purchase[]
+  tickets   Ticket[]
+}
+
+model Purchase {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  tierId            String      @db.ObjectId
+  tier              TicketTier  @relation(fields: [tierId], references: [id])
+  mpPaymentId       String?
+  mpPreferenceId    String?
+  status            String      @default("pending") // pending, paid, cancelled, refunded
+  buyerName         String
+  buyerEmail        String
+  buyerDni          String?
+  quantity          Int
+  totalAmount       Float
+  guests            Json? // [{ name, dni, birthDate, alcoholAllowance, diet }]
+  buyerParticipation String  @default("asistir") // asistir | donacion
+  referringVolunteer String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  tickets           Ticket[]
+}
+
+model Ticket {
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  purchaseId        String            @db.ObjectId
+  purchase          Purchase          @relation(fields: [purchaseId], references: [id])
+  tierId            String            @db.ObjectId
+  tier              TicketTier        @relation(fields: [tierId], references: [id])
+  qrCode            String            @unique
+  status            String            @default("active") // active, used, cancelled
+  holderName        String
+  holderDni         String
+  holderBirthDate   DateTime?
+  alcoholAllowance  Int               @default(5) // 0 si es menor de edad al comprar
+  diet              String            @default("regular") // regular, vegetariano, celiaco, sin_carne_viernes
+  checkedInAt       DateTime?
+  createdAt         DateTime          @default(now())
+  drinkRedemptions DrinkRedemption[]
+}
+
+model DrinkRedemption {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  ticketId  String   @db.ObjectId
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  drinkType String   // alcoholic, non_alcoholic
+  servedAt  DateTime @default(now())
+  servedBy  String?  // staff member who served
+}
