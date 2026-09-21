@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["mesa-pdf-indoor-ing.trycloudflare.com"],
+  allowedDevOrigins: ["austral-festival.vercel.app"],
   async headers() {
     return [
       {

@@ -195,11 +195,13 @@ export async function createCheckoutPreference({
       data: { mpPreferenceId: String(preference.id) },
     });
 
-    // ENTORNO TESTING (sandbox): redirigir al checkout de pruebas.
-    const initPoint =
-      preference.sandbox_init_point ?? preference.init_point;
-    // ENTORNO PRODUCCION:
-    // const initPoint = preference.init_point ?? preference.sandbox_init_point;
+    const isProduction =
+      process.env.NODE_ENV === "production" ||
+      !process.env.MP_ACCESS_TOKEN?.startsWith("TEST-");
+
+    const initPoint = isProduction
+      ? (preference.init_point ?? preference.sandbox_init_point)
+      : (preference.sandbox_init_point ?? preference.init_point);
     if (!initPoint) {
       return { ok: false, error: "No se pudo iniciar el pago. Intentá de nuevo." };
     }
