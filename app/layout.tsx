@@ -28,7 +28,11 @@ export const metadata: Metadata = {
     "Venta de entradas para la peña folklórica de la Universidad Austral, en el Campus Pilar.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="es"
@@ -58,6 +62,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 className="font-semibold text-muted-foreground transition-colors hover:text-foreground"
               >
                 Validar
+              </Link>
+              <Link
+                href="/dashboard"
+                className="font-semibold text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Dashboard
               </Link>
             </nav>
           </div>
