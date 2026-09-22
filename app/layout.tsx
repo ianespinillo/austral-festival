@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Lato, Rowdies } from "next/font/google";
+import { Geist_Mono, Montserrat, Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { Ticket as TicketIcon } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const lato = Lato({
-  weight: ["400", "700", "900"],
+const montserrat = Montserrat({
+  weight: ["200", "300", "400", "500", "600"],
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-const rowdies = Rowdies({
-  weight: ["400", "700"],
+const playfair = Playfair_Display({
+  weight: ["400", "600", "700", "900"],
   subsets: ["latin"],
-  variable: "--font-display",
+  variable: "--font-serif",
 });
 
 const geistMono = Geist_Mono({
@@ -32,30 +32,32 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      className={`${lato.variable} ${rowdies.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${playfair.variable} ${geistMono.variable} dark h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+      <body className="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-white selection:text-black">
+        <header className="sticky top-0 z-40 border-b border-white/10 bg-[#080407]/90 backdrop-blur-md">
+          <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
             <Link
               href="/"
-              className="flex items-center gap-2 font-display text-base font-bold tracking-tight text-foreground"
+              className="flex items-center gap-3 transition-opacity hover:opacity-80"
             >
-              <span className="grid size-8 place-items-center rounded-full bg-primary text-primary-foreground">
-                <TicketIcon className="size-4" />
+              <span className="grid size-8 place-items-center rounded-sm border border-white/30 text-white">
+                <TicketIcon className="size-4" strokeWidth={1.5} />
               </span>
-              Peña Folklórica Austral
+              <span className="font-serif text-sm font-bold uppercase tracking-[0.2em] text-white">
+                Peña Folklórica Austral
+              </span>
             </Link>
-            <nav className="flex items-center gap-4 text-sm">
+            <nav className="flex items-center gap-6 text-xs uppercase font-light tracking-[0.25em]">
               <Link
                 href="/#entradas"
-                className="font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                className="text-white/70 transition-colors hover:text-white"
               >
                 Entradas
               </Link>
               <Link
                 href="/validar"
-                className="font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                className="text-white/70 transition-colors hover:text-white"
               >
                 Validar
               </Link>
@@ -63,12 +65,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </div>
         </header>
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-border/70 bg-muted/40">
-          <div className="mx-auto max-w-5xl px-4 py-6 text-center text-xs text-muted-foreground">
+        <footer className="border-t border-white/10 bg-[#050204]">
+          <div className="mx-auto max-w-5xl px-6 py-10 text-center text-[11px] font-light uppercase tracking-[0.25em] text-white/50">
             Peña Folklórica · Universidad Austral · Campus Pilar · 2026
           </div>
         </footer>
-        <Toaster position="top-center" richColors />
+        <Toaster position="top-center" richColors theme="dark" />
       </body>
     </html>
   );

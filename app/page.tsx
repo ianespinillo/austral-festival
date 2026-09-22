@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { PurchaseForm } from "@/components/purchase/purchase-form";
 import {
@@ -21,31 +22,16 @@ export const dynamic = "force-dynamic";
 const formatPrice = (value: number) =>
   value.toLocaleString("es-AR", { style: "currency", currency: "ARS" });
 
-const pennantColors = ["#C23A54", "#F7B83A", "#4FA3D1", "#3E8E6A"];
-
-function Guirnalda() {
+function MinimalDivider() {
   return (
-    <div aria-hidden className="mx-auto -mt-2 max-w-3xl px-6">
-      <svg viewBox="0 0 640 40" className="w-full text-muted-foreground">
-        <path
-          d="M0 6 C 90 30, 170 30, 260 6 S 430 6, 520 30 S 640 6, 640 6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        {Array.from({ length: 11 }).map((_, i) => {
-          const x = 40 + i * 52;
-          const y = 8 + (i % 2 === 0 ? 0 : 14);
-          return (
-            <path
-              key={i}
-              d={`M ${x} ${y} L ${x + 22} ${y + 30} L ${x + 44} ${y} Z`}
-              fill={pennantColors[i % pennantColors.length]}
-            />
-          );
-        })}
-      </svg>
+    <div aria-hidden className="mx-auto flex max-w-3xl items-center justify-center gap-4 px-6 py-6">
+      <div className="h-px flex-1 bg-white/15" />
+      <div className="flex items-center gap-2 text-white/40">
+        <span className="size-1 rotate-45 border border-white/60" />
+        <span className="size-1.5 rotate-45 border border-white" />
+        <span className="size-1 rotate-45 border border-white/60" />
+      </div>
+      <div className="h-px flex-1 bg-white/15" />
     </div>
   );
 }
@@ -59,11 +45,11 @@ export default async function Home() {
 
   if (!event) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        <h1 className="font-display text-2xl font-bold">
+      <div className="mx-auto max-w-3xl px-4 py-28 text-center">
+        <h1 className="font-serif text-2xl font-bold uppercase tracking-widest text-white">
           Evento no publicado todavía
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-3 text-xs font-light uppercase tracking-[0.25em] text-white/60">
           Volvé pronto, estamos preparando la próxima peña.
         </p>
       </div>
@@ -81,90 +67,87 @@ export default async function Home() {
     weekday: "long",
     day: "numeric",
     month: "long",
-    hour: "2-digit",
-    minute: "2-digit",
   });
 
   return (
-    <div>
-      <section className="relative overflow-hidden">
+    <div className="bg-[#080407] text-white">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden border-b border-white/10">
+        {/* Background Image: Underexposed and Desaturated */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-24 -left-24 size-80 rounded-full bg-cielo/30 blur-3xl" />
-          <div className="absolute top-8 -right-16 size-72 rounded-full bg-oro/40 blur-3xl" />
-          <div className="absolute bottom-0 left-1/3 size-72 rounded-full bg-vino/15 blur-3xl" />
+          <Image
+            src="/folk-hero.jpg"
+            alt="Fondo de instrumentos folklóricos en penumbra"
+            fill
+            priority
+            className="object-cover object-center grayscale contrast-125 brightness-[0.22] opacity-40"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#080407]/90 via-[#180516]/80 to-[#080407]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#080407_85%)]" />
         </div>
 
-        <div className="relative mx-auto max-w-5xl px-4 py-16 sm:py-24">
-          <p className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary ring-1 ring-primary/20">
-            <Music className="size-3.5" /> Peña Folklórica · Universidad Austral
-          </p>
-
-          <div className="relative">
-            <div className="absolute -top-6 right-0 hidden rotate-6 md:block">
-              <div className="grid size-36 place-items-center rounded-full bg-oro text-center text-accent-foreground shadow-lg ring-2 ring-dashed ring-accent-foreground/30 ring-offset-4 ring-offset-background">
-                <div>
-                  <div className="font-display text-xs font-bold uppercase tracking-wide">
-                    {PREVENTA_LABEL}
-                  </div>
-                  <div className="mt-1 font-display text-2xl font-bold">
-                    {formatPrice(unitPrice)}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <h1 className="max-w-3xl font-display text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
-              <span className="block text-primary">
-                Una noche de folklore,
-              </span>
-              <span className="block text-cielo">
-                baile, canto y amigos,
-              </span>
-              <span className="block text-foreground">en Mariano Acosta 1610, Pilar.</span>
-            </h1>
+        <div className="relative mx-auto max-w-5xl px-6 py-24 sm:py-32 text-center">
+          {/* Tag / Pre-heading */}
+          <div className="inline-flex items-center gap-2.5 border border-white/20 bg-black/40 px-4 py-1.5 text-[11px] font-light uppercase tracking-[0.3em] text-white backdrop-blur">
+            <Music className="size-3 text-white" strokeWidth={1.5} />
+            <span>Peña Folklórica · Universidad Austral</span>
           </div>
 
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          {/* Main Headline */}
+          <h1 className="mx-auto mt-8 max-w-4xl font-serif text-4xl font-bold uppercase tracking-wider text-white sm:text-6xl lg:text-7xl leading-[1.12]">
+            Una noche de folklore, baile, canto y amigos
+          </h1>
+
+          <p className="mt-4 font-sans text-xs font-light uppercase tracking-[0.25em] text-white/75 sm:text-sm">
+            En Mariano Acosta 1610, Pilar
+          </p>
+
+          <p className="mx-auto mt-6 max-w-2xl font-sans text-sm font-light leading-relaxed text-white/70 sm:text-base">
             {event.description}
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3 text-sm font-semibold">
-            <span className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-secondary-foreground">
-              <CalendarDays className="size-4" /> {dateLabel}
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-secondary-foreground">
-              <Clock3 className="size-4" /> {DOORS_TEXT}
-            </span>
+          {/* Centered details bar separated by fine white lines */}
+          <div className="mt-12 inline-flex flex-wrap items-center justify-center divide-y divide-white/15 border border-white/20 bg-[#140512]/90 backdrop-blur sm:divide-y-0 sm:divide-x">
+            <div className="flex items-center gap-2 px-5 py-3 text-xs font-light uppercase tracking-[0.2em] text-white/90">
+              <CalendarDays className="size-3.5 text-white" strokeWidth={1.5} />
+              <span>{dateLabel}</span>
+            </div>
+            <div className="flex items-center gap-2 px-5 py-3 text-xs font-light uppercase tracking-[0.2em] text-white/90">
+              <Clock3 className="size-3.5 text-white" strokeWidth={1.5} />
+              <span>{DOORS_TEXT}</span>
+            </div>
             <a
               href={VENUE_MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-secondary-foreground transition-colors hover:bg-secondary/70 hover:underline"
+              className="flex items-center gap-2 px-5 py-3 text-xs font-light uppercase tracking-[0.2em] text-white/90 transition-colors hover:text-white hover:bg-white/5"
             >
-              <MapPin className="size-4" /> {event.venue}
+              <MapPin className="size-3.5 text-white" strokeWidth={1.5} />
+              <span>{event.venue}</span>
             </a>
-            <span className="font-display text-sm font-bold text-pampa md:hidden">
-              {PREVENTA_LABEL} · {formatPrice(unitPrice)}
-            </span>
+            <div className="flex items-center gap-2 px-5 py-3 text-xs font-medium uppercase tracking-[0.2em] text-white bg-white/5">
+              <span>{PREVENTA_LABEL}</span>
+              <span className="font-serif text-sm font-bold tracking-normal">
+                {formatPrice(unitPrice)}
+              </span>
+            </div>
           </div>
         </div>
       </section>
 
-      <Guirnalda />
+      <MinimalDivider />
 
-      <section
-        id="entradas"
-        className="scroll-mt-20 py-14 sm:py-20"
-      >
-        <div className="mx-auto max-w-5xl px-4">
+      {/* Tickets / Purchase Section */}
+      <section id="entradas" className="scroll-mt-16 py-16 sm:py-24">
+        <div className="mx-auto max-w-5xl px-6">
           <div className="text-center">
-            <p className="font-display text-sm font-bold uppercase tracking-widest text-pampa">
+            <p className="text-xs font-light uppercase tracking-[0.3em] text-white/60">
               Entradas
             </p>
-            <h2 className="mt-1 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="mt-2 font-serif text-3xl font-bold uppercase tracking-wider text-white sm:text-5xl">
               Conseguí tu entrada hoy
             </h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
+            <p className="mx-auto mt-4 max-w-xl text-xs sm:text-sm font-light leading-relaxed text-white/70">
               Pagá con Mercado Pago y recibí tu QR por email al instante.
               Disponibles en {PREVENTA_LABEL}. Una sola entrada, la que da todo:
               música, patio de comidas y {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
@@ -183,41 +166,42 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-t-2 border-dashed border-border/80 bg-secondary/50">
-        <div className="mx-auto max-w-5xl px-4 py-12">
-          <div className="grid gap-5 sm:grid-cols-3">
-            <div className="rounded-2xl border border-border bg-card p-6">
-              <div className="grid size-10 place-items-center rounded-full bg-pampa text-white">
-                <ShieldCheck className="size-5" />
+      {/* Trust & Details: 3-column clean line-divided block */}
+      <section className="border-t border-b border-white/15 bg-[#10040e]">
+        <div className="mx-auto max-w-5xl px-6 py-20">
+          <div className="grid divide-y divide-white/15 border border-white/15 bg-[#150513] sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+            <div className="flex flex-col items-center p-8 text-center sm:p-10">
+              <div className="grid size-12 place-items-center rounded-sm border border-white/30 text-white">
+                <ShieldCheck className="size-6 text-white" strokeWidth={1.25} />
               </div>
-              <h3 className="mt-4 font-display text-base font-bold">
+              <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-white">
                 Pago seguro
               </h3>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-3 text-xs font-light leading-relaxed text-white/60">
                 Procesado por Mercado Pago, con todos los medios de pago de
                 Argentina. No está permitida la venta a menores de edad.
               </p>
             </div>
-            <div className="rounded-2xl border border-border bg-card p-6">
-              <div className="grid size-10 place-items-center rounded-full bg-cielo text-white">
-                <TicketIcon className="size-5" />
+            <div className="flex flex-col items-center p-8 text-center sm:p-10">
+              <div className="grid size-12 place-items-center rounded-sm border border-white/30 text-white">
+                <TicketIcon className="size-6 text-white" strokeWidth={1.25} />
               </div>
-              <h3 className="mt-4 font-display text-base font-bold">
+              <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-white">
                 QR al instante
               </h3>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-3 text-xs font-light leading-relaxed text-white/60">
                 Recibís tu código QR por email apenas confirmamos el pago.
                 Presentá tu QR en la entrada.
               </p>
             </div>
-            <div className="rounded-2xl border border-border bg-card p-6">
-              <div className="grid size-10 place-items-center rounded-full bg-vino text-white">
-                <Wine className="size-5" />
+            <div className="flex flex-col items-center p-8 text-center sm:p-10">
+              <div className="grid size-12 place-items-center rounded-sm border border-white/30 text-white">
+                <Wine className="size-6 text-white" strokeWidth={1.25} />
               </div>
-              <h3 className="mt-4 font-display text-base font-bold">
+              <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-white">
                 {DEFAULT_ALCOHOL_ALLOWANCE} consumos
               </h3>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-3 text-xs font-light leading-relaxed text-white/60">
                 Cada entrada incluye {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
                 alcohólicas. Los menores de edad no acceden a bebidas
                 alcohólicas.
