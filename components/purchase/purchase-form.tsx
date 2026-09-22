@@ -134,7 +134,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
 
   if (!tier) {
     return (
-      <div className="mx-auto mt-10 max-w-3xl rounded-3xl border border-border bg-card p-8 text-center text-muted-foreground">
+      <div className="mx-auto mt-10 max-w-3xl border border-border bg-[#1c0919] p-8 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
         No hay entradas a la venta por ahora.
       </div>
     );
@@ -143,49 +143,51 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
   const todayStr = new Date().toISOString().slice(0, 10);
 
   return (
-    <div className="mx-auto mt-10 max-w-3xl">
-      <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
-        <div className="flex items-center justify-between gap-4 bg-vino px-6 py-4 text-white">
+    <div className="mx-auto mt-12 max-w-3xl">
+      <div className="overflow-hidden border border-border bg-[#2c1328] shadow-2xl">
+        {/* Ticket Top Banner */}
+        <div className="flex items-center justify-between gap-4 border-b border-border bg-[#3a1835] px-6 py-4 text-foreground">
           <div className="flex items-center gap-2.5">
-            <Music className="size-5" />
-            <span className="font-display text-sm font-bold uppercase tracking-wide">
+            <Music className="size-4 text-amber-400" strokeWidth={1.5} />
+            <span className="font-serif text-xs font-bold uppercase tracking-[0.2em] text-foreground">
               Peña Folklórica Austral
             </span>
           </div>
-          <span className="rounded-full bg-oro px-3 py-1 font-display text-xs font-bold uppercase tracking-wide text-accent-foreground">
+          <span className="border border-amber-400/30 bg-amber-400/10 px-3 py-1 font-sans text-[10px] font-medium uppercase tracking-[0.25em] text-amber-200">
             Pilar · 2026
           </span>
         </div>
 
-        <div className="px-6 py-7 sm:px-8">
+        <div className="px-6 py-8 sm:px-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              <p className="text-[11px] font-medium uppercase tracking-[0.3em] text-amber-400/80">
                 Entradas
               </p>
-              <h3 className="mt-1 font-display text-2xl font-bold sm:text-3xl">
+              <h3 className="mt-1 font-serif text-2xl font-bold uppercase tracking-wider text-foreground sm:text-3xl">
                 {tier.name}
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="mt-2 text-xs font-light text-muted-foreground">
                 {soldOut
                   ? "Agotada"
                   : `Disponibles (${PREVENTA_LABEL}) · cada entrada incluye ${DEFAULT_ALCOHOL_ALLOWANCE} bebidas alcohólicas`}
               </p>
             </div>
-            <div className="font-display text-4xl font-bold text-primary sm:text-5xl">
+            <div className="font-serif text-4xl font-bold text-amber-300 sm:text-5xl tracking-tight">
               {formatPrice(tier.price)}
             </div>
           </div>
 
-          <div aria-hidden className="relative mt-8 mb-7">
-            <div className="absolute top-1/2 -left-6 size-6 -translate-y-1/2 rounded-full bg-background ring-1 ring-border" />
-            <div className="absolute top-1/2 -right-6 size-6 -translate-y-1/2 rounded-full bg-background ring-1 ring-border" />
-            <div className="border-t-2 border-dashed border-border" />
+          {/* Perforated ticket divider with cutouts */}
+          <div aria-hidden className="relative my-8">
+            <div className="absolute top-1/2 -left-10 size-6 -translate-y-1/2 rounded-full bg-[#251023] ring-1 ring-border" />
+            <div className="absolute top-1/2 -right-10 size-6 -translate-y-1/2 rounded-full bg-[#251023] ring-1 ring-border" />
+            <div className="border-t border-dashed border-border" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-4">
-              <h4 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-5">
+              <h4 className="font-serif text-xs font-bold uppercase tracking-[0.2em] text-amber-200/90">
                 Datos del comprador
               </h4>
 
@@ -197,10 +199,10 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                     <label
                       key={option.value}
                       className={cn(
-                        "relative flex cursor-pointer items-start gap-3 rounded-2xl border-2 bg-card p-4 transition-all has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/40",
+                        "relative flex cursor-pointer items-start gap-3 border p-4 transition-all has-[:focus-visible]:border-amber-400 has-[:focus-visible]:ring-1 has-[:focus-visible]:ring-amber-400/40",
                         active
-                          ? "border-primary shadow-sm ring-1 ring-primary/20"
-                          : "border-border hover:border-primary/40"
+                          ? "border-amber-400 bg-[#2f102b] text-foreground"
+                          : "border-border bg-[#160714] text-muted-foreground hover:border-amber-400/40"
                       )}
                     >
                       <input
@@ -213,18 +215,18 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                       />
                       <span
                         className={cn(
-                          "mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border-2 transition-colors",
-                          active ? "border-primary bg-primary" : "border-muted-foreground/40"
+                          "mt-0.5 grid size-4 shrink-0 place-items-center border transition-colors",
+                          active ? "border-amber-400 bg-amber-400" : "border-border bg-transparent"
                         )}
                       >
-                        {active && <CheckCircle2 className="size-3 text-primary-foreground" />}
+                        {active && <CheckCircle2 className="size-3 text-[#180917]" />}
                       </span>
                       <span className="grid gap-0.5">
-                        <span className="flex items-center gap-2 text-sm font-bold">
-                          <Icon className={cn("size-4", active ? "text-primary" : "text-muted-foreground")} />
+                        <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-foreground">
+                          <Icon className="size-3.5 text-amber-400" strokeWidth={1.5} />
                           {option.title}
                         </span>
-                        <span className="text-xs text-muted-foreground">{option.desc}</span>
+                        <span className="text-[11px] font-light text-muted-foreground">{option.desc}</span>
                       </span>
                     </label>
                   );
@@ -233,17 +235,22 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="buyerName">Nombre y apellido</Label>
+                  <Label htmlFor="buyerName" className="text-xs uppercase font-light tracking-[0.15em] text-foreground/80">
+                    Nombre y apellido
+                  </Label>
                   <Input
                     id="buyerName"
                     value={buyerName}
                     onChange={(e) => setBuyerName(e.target.value)}
                     placeholder="Ej: María González"
                     required
+                    className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="buyerEmail">Email (se envían todas las entradas aquí)</Label>
+                  <Label htmlFor="buyerEmail" className="text-xs uppercase font-light tracking-[0.15em] text-foreground/80">
+                    Email (se envían todas las entradas aquí)
+                  </Label>
                   <Input
                     id="buyerEmail"
                     type="email"
@@ -251,12 +258,13 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                     onChange={(e) => setBuyerEmail(e.target.value)}
                     placeholder="maria@example.com"
                     required
+                    className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="referringVolunteer">
+                <Label htmlFor="referringVolunteer" className="text-xs uppercase font-light tracking-[0.15em] text-foreground/80">
                   ¿Venís de parte de alguno de nuestros voluntarios?
                 </Label>
                 <Input
@@ -264,22 +272,25 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                   value={referringVolunteer}
                   onChange={(e) => setReferringVolunteer(e.target.value)}
                   placeholder="Ej: Ana Mendoza"
+                  className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
                 />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="quantity">Cantidad de entradas</Label>
+                  <Label htmlFor="quantity" className="text-xs uppercase font-light tracking-[0.15em] text-foreground/80">
+                    Cantidad de entradas
+                  </Label>
                   <Select
                     value={String(quantity)}
                     onValueChange={handleQuantityChange}
                   >
-                    <SelectTrigger id="quantity">
+                    <SelectTrigger id="quantity" className="border-border bg-black/30 text-foreground focus-visible:border-amber-400">
                       <SelectValue placeholder="Cantidad" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border-border bg-[#240c20] text-foreground">
                       {Array.from({ length: 6 }, (_, i) => i + 1).map((n) => (
-                        <SelectItem key={n} value={String(n)}>
+                        <SelectItem key={n} value={String(n)} className="focus:bg-amber-400/15 focus:text-amber-200">
                           {n} {n === 1 ? "entrada" : "entradas"}
                         </SelectItem>
                       ))}
@@ -291,35 +302,40 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
 
             {attending ? (
               <div className="space-y-4">
-                <h4 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">
+                <h4 className="font-serif text-xs font-bold uppercase tracking-[0.2em] text-amber-200/90">
                   Datos de cada asistente
                 </h4>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[11px] font-light text-muted-foreground">
                   Completá los datos de cada persona. Los menores de 18 años no tendrán acceso a
                   bebidas alcohólicas.
                 </p>
                 {guests.map((guest, i) => (
                   <div
                     key={i}
-                    className="rounded-xl border border-border bg-secondary/30 p-4"
+                    className="border border-border bg-[#240c20] p-4"
                   >
-                    <p className="mb-3 flex items-center gap-2 text-sm font-semibold">
-                      <UserRound className="h-4 w-4" />
+                    <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-foreground">
+                      <UserRound className="h-3.5 w-3.5 text-amber-400" strokeWidth={1.5} />
                       Asistente {i + 1}
                     </p>
                     <div className="grid gap-3 sm:grid-cols-3">
                       <div className="space-y-1 sm:col-span-2">
-                        <Label htmlFor={`guest-name-${i}`}>Nombre completo</Label>
+                        <Label htmlFor={`guest-name-${i}`} className="text-[11px] uppercase font-light tracking-[0.1em] text-muted-foreground">
+                          Nombre completo
+                        </Label>
                         <Input
                           id={`guest-name-${i}`}
                           value={guest.name}
                           onChange={(e) => updateGuest(i, "name", e.target.value)}
                           placeholder="Ej: Juan Pérez"
                           required
+                          className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
                         />
                       </div>
                       <div className="space-y-1">
-                        <Label htmlFor={`guest-dni-${i}`}>DNI</Label>
+                        <Label htmlFor={`guest-dni-${i}`} className="text-[11px] uppercase font-light tracking-[0.1em] text-muted-foreground">
+                          DNI
+                        </Label>
                         <Input
                           id={`guest-dni-${i}`}
                           inputMode="numeric"
@@ -329,10 +345,11 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                           }
                           placeholder="Ej: 40123456"
                           required
+                          className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
                         />
                       </div>
                       <div className="space-y-1">
-                        <Label htmlFor={`guest-birth-${i}`}>
+                        <Label htmlFor={`guest-birth-${i}`} className="text-[11px] uppercase font-light tracking-[0.1em] text-muted-foreground">
                           Fecha de nacimiento
                         </Label>
                         <Input
@@ -344,24 +361,28 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                           }
                           max={todayStr}
                           required
+                          className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
                         />
                       </div>
                       <div className="space-y-1 sm:col-span-2">
-                        <Label htmlFor={`guest-diet-${i}`}>Menú</Label>
+                        <Label htmlFor={`guest-diet-${i}`} className="text-[11px] uppercase font-light tracking-[0.1em] text-muted-foreground">
+                          Menú
+                        </Label>
                         <Select
                           value={guest.diet}
                           onValueChange={(value) =>
                             updateGuest(i, "diet", value ?? "regular")
                           }
                         >
-                          <SelectTrigger id={`guest-diet-${i}`}>
+                          <SelectTrigger id={`guest-diet-${i}`} className="border-border bg-black/30 text-foreground focus-visible:border-amber-400">
                             <SelectValue placeholder="Seleccioná el menú" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="border-border bg-[#240c20] text-foreground">
                             {DIET_OPTIONS.map((option) => (
                               <SelectItem
                                 key={option.value}
                                 value={option.value}
+                                className="focus:bg-amber-400/15 focus:text-amber-200"
                               >
                                 {option.label}
                               </SelectItem>
@@ -374,11 +395,11 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                 ))}
               </div>
             ) : (
-              <div className="flex items-start gap-3 rounded-2xl border border-dashed border-primary/40 bg-primary/5 p-4 text-sm">
-                <Heart className="mt-0.5 size-5 shrink-0 text-primary" />
+              <div className="flex items-start gap-3 border border-dashed border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
+                <Heart className="mt-0.5 size-4 shrink-0 text-amber-400" strokeWidth={1.5} />
                 <div>
-                  <p className="font-semibold">Donación registrada</p>
-                  <p className="mt-0.5 text-muted-foreground">
+                  <p className="font-semibold uppercase tracking-wider text-xs text-amber-300">Donación registrada</p>
+                  <p className="mt-1 text-xs font-light text-amber-200/80">
                     Las <strong>{quantity}</strong> entradas quedan a disposición de la
                     organización para entregarse. No hace falta cargar datos de asistentes.
                   </p>
@@ -386,35 +407,36 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
               </div>
             )}
 
-            <div className="flex items-center justify-between rounded-2xl bg-secondary/60 px-5 py-4">
-              <div className="text-sm font-semibold">
-                {quantity} {quantity === 1 ? "entrada" : "entradas"} ·{" "}
-                {attending ? "asistencia" : "donación"}
+            {/* Total summary bar */}
+            <div className="flex items-center justify-between border border-amber-400/30 bg-[#34152f] px-5 py-4">
+              <div className="text-xs font-light uppercase tracking-[0.2em] text-foreground/80">
+                {quantity} {quantity === 1 ? "entrada" : "entradas"} ·
               </div>
-              <div className="font-display text-2xl font-bold text-foreground">
+              <div className="font-serif text-2xl font-bold text-amber-300 tracking-wide">
                 {formatPrice(total)}
               </div>
             </div>
 
+            {/* Primary Action Button */}
             <Button
               type="submit"
               size="lg"
-              className="w-full bg-primary text-base font-bold hover:bg-primary/90"
+              className="h-12 w-full bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#1e0a1c] font-bold text-xs uppercase tracking-[0.25em] transition-all shadow-md shadow-black/20 hover:shadow-lg border border-[#ECC472]/60 disabled:opacity-50 cursor-pointer"
               disabled={loading || soldOut}
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />{" "}
+                  <Loader2 className="mr-2 size-4 animate-spin text-[#1e0a1c]" />{" "}
                   Preparando pago…
                 </>
               ) : (
                 `Pagar ${formatPrice(total)} con Mercado Pago`
               )}
             </Button>
-            <p className="text-center text-xs text-muted-foreground">
+            <p className="text-center text-[11px] font-light uppercase tracking-[0.2em] text-muted-foreground/75">
               Al completar el pago recibís tu código QR por email.
             </p>
-            <p className="text-center text-xs text-muted-foreground">
+            <p className="text-center text-[11px] font-light uppercase tracking-[0.2em] text-muted-foreground/50">
               No está permitida la venta de bebidas alcohólicas a menores de edad.
             </p>
           </form>

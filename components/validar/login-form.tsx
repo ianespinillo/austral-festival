@@ -32,7 +32,9 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="staffPassword">Contraseña del equipo</Label>
+        <Label htmlFor="staffPassword" className="text-xs uppercase font-light tracking-[0.15em] text-foreground/80">
+          Contraseña del equipo
+        </Label>
         <Input
           id="staffPassword"
           type="password"
@@ -40,12 +42,17 @@ export function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
           required
+          className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
         />
       </div>
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button
+        type="submit"
+        className="w-full h-11 bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#1e0a1c] font-bold text-xs uppercase tracking-[0.2em] transition-all shadow-md shadow-black/20 hover:shadow-lg border border-[#ECC472]/60 cursor-pointer"
+        disabled={loading}
+      >
         {loading ? (
           <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Verificando…
+            <Loader2 className="mr-2 h-4 w-4 animate-spin text-[#1e0a1c]" /> Verificando…
           </>
         ) : (
           "Ingresar al panel"

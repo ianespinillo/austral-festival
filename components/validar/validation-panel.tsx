@@ -66,51 +66,73 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <div className="mx-auto max-w-3xl px-6 py-12">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
+          <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-foreground">
             Panel de validación
           </h1>
-          <p className="text-sm text-muted-foreground">{eventName}</p>
+          <p className="mt-1 text-xs font-light uppercase tracking-[0.2em] text-muted-foreground">
+            {eventName}
+          </p>
         </div>
-        <Button variant="ghost" size="sm" onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" /> Cerrar sesión
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleLogout}
+          className="border-border text-xs font-light uppercase tracking-[0.2em] text-foreground hover:bg-white/5"
+        >
+          <LogOut className="mr-2 h-3.5 w-3.5 text-amber-400" strokeWidth={1.5} /> Cerrar sesión
         </Button>
       </div>
 
       <Tabs defaultValue="qr" className="space-y-6">
-        <TabsList className="w-full sm:w-auto">
-          <TabsTrigger value="qr">
-            <ScanLine className="mr-2 h-4 w-4" /> Escanear QR
+        <TabsList className="border border-border bg-[#240c20] p-1 text-foreground">
+          <TabsTrigger
+            value="qr"
+            className="text-xs uppercase font-medium tracking-[0.15em] data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:via-amber-400 data-[state=active]:to-amber-500 data-[state=active]:text-[#180917]"
+          >
+            <ScanLine className="mr-2 h-3.5 w-3.5" strokeWidth={1.5} /> Escanear QR
           </TabsTrigger>
-          <TabsTrigger value="dni">
-            <UserRound className="mr-2 h-4 w-4" /> Buscar por DNI
+          <TabsTrigger
+            value="dni"
+            className="text-xs uppercase font-medium tracking-[0.15em] data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:via-amber-400 data-[state=active]:to-amber-500 data-[state=active]:text-[#180917]"
+          >
+            <UserRound className="mr-2 h-3.5 w-3.5" strokeWidth={1.5} /> Buscar por DNI
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="qr" className="space-y-4">
-          <QrScanner onResult={handleQrResult} />
+          <div className="border border-border bg-[#1f0a1c] p-4">
+            <QrScanner onResult={handleQrResult} />
+          </div>
           <form
             onSubmit={handleManualSubmit}
             className="flex items-end gap-2"
           >
             <div className="flex-1 space-y-2">
-              <Label htmlFor="manualCode">Código de entrada (manual)</Label>
+              <Label htmlFor="manualCode" className="text-xs uppercase font-light tracking-[0.15em] text-foreground/80">
+                Código de entrada (manual)
+              </Label>
               <Input
                 id="manualCode"
                 value={manualCode}
                 onChange={(e) => setManualCode(e.target.value)}
                 placeholder="TICKET-ABCD-1234"
+                className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
               />
             </div>
-            <Button type="submit" disabled={!manualCode.trim()}>
-              <Search className="mr-2 h-4 w-4" /> Buscar
+            <Button
+              type="submit"
+              disabled={!manualCode.trim()}
+              className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-[#180917] hover:brightness-105 text-xs uppercase font-semibold tracking-[0.15em]"
+            >
+              <Search className="mr-2 h-3.5 w-3.5 text-[#180917]" strokeWidth={1.5} /> Buscar
             </Button>
           </form>
           {searching && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 className="h-4 w-4 animate-spin" /> Consultando…
+            <div className="flex items-center gap-2 text-xs font-light uppercase tracking-[0.15em] text-muted-foreground">
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-amber-400" /> Consultando…
             </div>
           )}
         </TabsContent>
@@ -118,7 +140,9 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
         <TabsContent value="dni">
           <form onSubmit={handleDniSearch} className="flex items-end gap-2">
             <div className="flex-1 space-y-2">
-              <Label htmlFor="dni">DNI del titular</Label>
+              <Label htmlFor="dni" className="text-xs uppercase font-light tracking-[0.15em] text-foreground/80">
+                DNI del titular
+              </Label>
               <Input
                 id="dni"
                 inputMode="numeric"
@@ -126,28 +150,33 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
                 onChange={(e) => setDni(e.target.value.replace(/\D/g, ""))}
                 placeholder="Ej: 40123456"
                 required
+                className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
               />
             </div>
-            <Button type="submit" disabled={searching}>
+            <Button
+              type="submit"
+              disabled={searching}
+              className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-[#180917] hover:brightness-105 text-xs uppercase font-semibold tracking-[0.15em]"
+            >
               {searching ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin text-[#180917]" />
               ) : (
-                <Search className="mr-2 h-4 w-4" />
+                <Search className="mr-2 h-3.5 w-3.5 text-[#180917]" strokeWidth={1.5} />
               )}
               Buscar
             </Button>
           </form>
           {searching && (
-            <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 className="h-4 w-4 animate-spin" /> Consultando…
+            <div className="mt-4 flex items-center gap-2 text-xs font-light uppercase tracking-[0.15em] text-muted-foreground">
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-amber-400" /> Consultando…
             </div>
           )}
         </TabsContent>
       </Tabs>
 
       {tickets.length > 0 && (
-        <div className="mt-6 space-y-4">
-          <p className="text-sm font-medium text-muted-foreground">
+        <div className="mt-8 space-y-4">
+          <p className="text-xs font-light uppercase tracking-[0.2em] text-white/60">
             {tickets.length === 1
               ? "1 entrada encontrada"
               : `${tickets.length} entradas encontradas`}
