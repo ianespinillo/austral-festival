@@ -52,51 +52,52 @@
     --font-serif: 'Playfair Display', serif;
     --font-display: 'Playfair Display', serif;
 
-    /* Deep black background with subtle dark plum undertone */
-    --background: #080407;
-    --foreground: #FFFFFF;
+    /* Lighter, richer warm wine / bordeaux nocturno */
+    --background: #251023;
+    --foreground: #FFF8F0;
 
-    /* Deep plum/burgundy block colors */
-    --plum-deep: #0e040c;
-    --plum: #1c0717;
-    --plum-card: #150512;
-    --plum-border: rgba(255, 255, 255, 0.15);
+    /* Deep wine & warm plum blocks */
+    --plum-deep: #1c0a1a;
+    --plum: #381734;
+    --plum-card: #30132d;
+    --plum-border: rgba(245, 215, 185, 0.20);
 
-    --card: #130510;
-    --card-foreground: #FFFFFF;
-    --popover: #150512;
-    --popover-foreground: #FFFFFF;
+    --card: #30132d;
+    --card-foreground: #FFF8F0;
+    --popover: #341530;
+    --popover-foreground: #FFF8F0;
 
-    /* High contrast pure white primary CTA */
-    --primary: #FFFFFF;
-    --primary-foreground: #080407;
+    /* Refined warm champagne primary CTA */
+    --amber-gold: #E5AC55;
+    --primary: #FBF3E8;
+    --primary-foreground: #251023;
 
-    /* Dark plum secondary block */
-    --secondary: #1f071a;
-    --secondary-foreground: #FFFFFF;
+    /* Wine secondary */
+    --secondary: #3d1938;
+    --secondary-foreground: #FFF8F0;
 
-    --muted: #180614;
-    --muted-foreground: rgba(255, 255, 255, 0.65);
+    --muted: #341530;
+    --muted-foreground: rgba(255, 235, 220, 0.72);
 
-    --accent: #260920;
-    --accent-foreground: #FFFFFF;
+    --accent: #441b3e;
+    --accent-foreground: #FBF3E8;
 
     --destructive: #b91c1c;
 
-    --border: rgba(255, 255, 255, 0.15);
-    --input: rgba(255, 255, 255, 0.2);
-    --ring: rgba(255, 255, 255, 0.6);
+    --border: rgba(245, 215, 185, 0.18);
+    --input: rgba(245, 215, 185, 0.22);
+    --ring: #FBF3E8;
 
     --radius: 0.5rem;
 
-    --sidebar: #130510;
-    --sidebar-foreground: #FFFFFF;
-    --sidebar-primary: #FFFFFF;
-    --sidebar-primary-foreground: #080407;
-    --sidebar-accent: #260920;
-    --sidebar-accent-foreground: #FFFFFF;
-    --sidebar-border: rgba(255, 255, 255, 0.15);
-    --sidebar-ring: rgba(255, 255, 255, 0.6);
+    --sidebar: #30132d;
+    --sidebar-foreground: #FFF8F0;
+    --sidebar-primary: #FBF3E8;
+    --sidebar-primary-foreground: #251023;
+    --sidebar-accent: #441b3e;
+    --sidebar-accent-foreground: #FBF3E8;
+    --sidebar-border: rgba(245, 215, 185, 0.18);
+    --sidebar-ring: #FBF3E8;
 }
 
 @layer base {
@@ -104,7 +105,7 @@
         @apply border-border outline-ring/40;
     }
     body {
-        @apply bg-background text-foreground font-sans antialiased selection:bg-white selection:text-black;
+        @apply bg-background text-foreground font-sans antialiased selection:bg-amber-400/30 selection:text-amber-100;
     }
     html {
         @apply font-sans;

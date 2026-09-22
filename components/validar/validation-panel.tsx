@@ -67,12 +67,12 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-6">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
         <div>
-          <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-white">
+          <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-foreground">
             Panel de validación
           </h1>
-          <p className="mt-1 text-xs font-light uppercase tracking-[0.2em] text-white/60">
+          <p className="mt-1 text-xs font-light uppercase tracking-[0.2em] text-muted-foreground">
             {eventName}
           </p>
         </div>
@@ -80,30 +80,30 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
           variant="outline"
           size="sm"
           onClick={handleLogout}
-          className="border-white/20 text-xs font-light uppercase tracking-[0.2em] text-white hover:bg-white/10"
+          className="border-border text-xs font-light uppercase tracking-[0.2em] text-foreground hover:bg-white/5"
         >
-          <LogOut className="mr-2 h-3.5 w-3.5 text-white" strokeWidth={1.5} /> Cerrar sesión
+          <LogOut className="mr-2 h-3.5 w-3.5 text-amber-400" strokeWidth={1.5} /> Cerrar sesión
         </Button>
       </div>
 
       <Tabs defaultValue="qr" className="space-y-6">
-        <TabsList className="border border-white/15 bg-[#140512] p-1 text-white">
+        <TabsList className="border border-border bg-[#240c20] p-1 text-foreground">
           <TabsTrigger
             value="qr"
-            className="text-xs uppercase font-light tracking-[0.15em] data-[state=active]:bg-white data-[state=active]:text-[#080407]"
+            className="text-xs uppercase font-medium tracking-[0.15em] data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:via-amber-400 data-[state=active]:to-amber-500 data-[state=active]:text-[#180917]"
           >
             <ScanLine className="mr-2 h-3.5 w-3.5" strokeWidth={1.5} /> Escanear QR
           </TabsTrigger>
           <TabsTrigger
             value="dni"
-            className="text-xs uppercase font-light tracking-[0.15em] data-[state=active]:bg-white data-[state=active]:text-[#080407]"
+            className="text-xs uppercase font-medium tracking-[0.15em] data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:via-amber-400 data-[state=active]:to-amber-500 data-[state=active]:text-[#180917]"
           >
             <UserRound className="mr-2 h-3.5 w-3.5" strokeWidth={1.5} /> Buscar por DNI
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="qr" className="space-y-4">
-          <div className="border border-white/15 bg-[#140512] p-4">
+          <div className="border border-border bg-[#1f0a1c] p-4">
             <QrScanner onResult={handleQrResult} />
           </div>
           <form
@@ -111,7 +111,7 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
             className="flex items-end gap-2"
           >
             <div className="flex-1 space-y-2">
-              <Label htmlFor="manualCode" className="text-xs uppercase font-light tracking-[0.15em] text-white/80">
+              <Label htmlFor="manualCode" className="text-xs uppercase font-light tracking-[0.15em] text-foreground/80">
                 Código de entrada (manual)
               </Label>
               <Input
@@ -119,20 +119,20 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
                 value={manualCode}
                 onChange={(e) => setManualCode(e.target.value)}
                 placeholder="TICKET-ABCD-1234"
-                className="border-white/20 bg-black/40 text-white placeholder:text-white/30 focus-visible:border-white"
+                className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
               />
             </div>
             <Button
               type="submit"
               disabled={!manualCode.trim()}
-              className="bg-white text-[#080407] hover:bg-white/90 text-xs uppercase font-semibold tracking-[0.15em]"
+              className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-[#180917] hover:brightness-105 text-xs uppercase font-semibold tracking-[0.15em]"
             >
-              <Search className="mr-2 h-3.5 w-3.5 text-[#080407]" strokeWidth={1.5} /> Buscar
+              <Search className="mr-2 h-3.5 w-3.5 text-[#180917]" strokeWidth={1.5} /> Buscar
             </Button>
           </form>
           {searching && (
-            <div className="flex items-center gap-2 text-xs font-light uppercase tracking-[0.15em] text-white/60">
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-white" /> Consultando…
+            <div className="flex items-center gap-2 text-xs font-light uppercase tracking-[0.15em] text-muted-foreground">
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-amber-400" /> Consultando…
             </div>
           )}
         </TabsContent>
@@ -140,7 +140,7 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
         <TabsContent value="dni">
           <form onSubmit={handleDniSearch} className="flex items-end gap-2">
             <div className="flex-1 space-y-2">
-              <Label htmlFor="dni" className="text-xs uppercase font-light tracking-[0.15em] text-white/80">
+              <Label htmlFor="dni" className="text-xs uppercase font-light tracking-[0.15em] text-foreground/80">
                 DNI del titular
               </Label>
               <Input
@@ -150,25 +150,25 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
                 onChange={(e) => setDni(e.target.value.replace(/\D/g, ""))}
                 placeholder="Ej: 40123456"
                 required
-                className="border-white/20 bg-black/40 text-white placeholder:text-white/30 focus-visible:border-white"
+                className="border-border bg-black/30 text-foreground placeholder:text-muted-foreground/40 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
               />
             </div>
             <Button
               type="submit"
               disabled={searching}
-              className="bg-white text-[#080407] hover:bg-white/90 text-xs uppercase font-semibold tracking-[0.15em]"
+              className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-[#180917] hover:brightness-105 text-xs uppercase font-semibold tracking-[0.15em]"
             >
               {searching ? (
-                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin text-[#080407]" />
+                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin text-[#180917]" />
               ) : (
-                <Search className="mr-2 h-3.5 w-3.5 text-[#080407]" strokeWidth={1.5} />
+                <Search className="mr-2 h-3.5 w-3.5 text-[#180917]" strokeWidth={1.5} />
               )}
               Buscar
             </Button>
           </form>
           {searching && (
-            <div className="mt-4 flex items-center gap-2 text-xs font-light uppercase tracking-[0.15em] text-white/60">
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-white" /> Consultando…
+            <div className="mt-4 flex items-center gap-2 text-xs font-light uppercase tracking-[0.15em] text-muted-foreground">
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-amber-400" /> Consultando…
             </div>
           )}
         </TabsContent>

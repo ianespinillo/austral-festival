@@ -11,7 +11,7 @@ async function main() {
   if (!event) {
     event = await prisma.event.create({
       data: {
-        name: "Peña Folklórica Austral 2026",
+        name: "Peña Austral 2026",
         description:
           "Una noche de folklore, baile y tradición argentina organizada por la Universidad Austral. Te esperamos en Mariano Acosta 1610 para cantar, bailar y compartir.",
         date: new Date("2026-11-20T23:00:00.000Z"),

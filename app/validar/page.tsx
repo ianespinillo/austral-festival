@@ -11,14 +11,14 @@ export default async function ValidarPage() {
   if (!authed) {
     return (
       <div className="mx-auto flex max-w-full flex-col items-center px-6 py-24 text-center">
-        <h1 className="font-serif text-3xl font-bold uppercase tracking-wider text-white">
+        <h1 className="font-serif text-3xl font-bold uppercase tracking-wider text-foreground">
           Validación de entradas
         </h1>
-        <p className="mt-3 max-w-sm text-xs font-light uppercase tracking-[0.15em] text-white/70 leading-relaxed">
+        <p className="mt-3 max-w-sm text-xs font-light uppercase tracking-[0.15em] text-muted-foreground leading-relaxed">
           Esta sección es para el equipo de la peña. Ingresá la contraseña para
           validar entradas y controlar el consumo de bebidas.
         </p>
-        <div className="mt-8 w-full max-w-sm border border-white/15 bg-[#140512] p-6 text-left">
+        <div className="mt-8 w-full max-w-sm border border-border bg-[#1f0a1c] p-6 text-left shadow-xl">
           <LoginForm />
         </div>
       </div>

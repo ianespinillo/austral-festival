@@ -25,13 +25,13 @@ const formatPrice = (value: number) =>
 function MinimalDivider() {
   return (
     <div aria-hidden className="mx-auto flex max-w-3xl items-center justify-center gap-4 px-6 py-6">
-      <div className="h-px flex-1 bg-white/15" />
-      <div className="flex items-center gap-2 text-white/40">
-        <span className="size-1 rotate-45 border border-white/60" />
-        <span className="size-1.5 rotate-45 border border-white" />
-        <span className="size-1 rotate-45 border border-white/60" />
+      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
+      <div className="flex items-center gap-2 text-amber-400/70">
+        <span className="size-1 rotate-45 border border-amber-400/60" />
+        <span className="size-1.5 rotate-45 border border-amber-300 bg-amber-400" />
+        <span className="size-1 rotate-45 border border-amber-400/60" />
       </div>
-      <div className="h-px flex-1 bg-white/15" />
+      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
     </div>
   );
 }
@@ -46,10 +46,10 @@ export default async function Home() {
   if (!event) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-28 text-center">
-        <h1 className="font-serif text-2xl font-bold uppercase tracking-widest text-white">
+        <h1 className="font-serif text-2xl font-bold uppercase tracking-widest text-foreground">
           Evento no publicado todavía
         </h1>
-        <p className="mt-3 text-xs font-light uppercase tracking-[0.25em] text-white/60">
+        <p className="mt-3 text-xs font-light uppercase tracking-[0.25em] text-muted-foreground">
           Volvé pronto, estamos preparando la próxima peña.
         </p>
       </div>
@@ -70,64 +70,72 @@ export default async function Home() {
   });
 
   return (
-    <div className="bg-[#080407] text-white">
+    <div className="bg-background text-foreground">
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-white/10">
-        {/* Background Image: Underexposed and Desaturated */}
+      <section className="relative overflow-hidden border-b border-border">
+        {/* Background Image: Warm peña ambiance with acoustic tones */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <Image
             src="/folk-hero.jpg"
-            alt="Fondo de instrumentos folklóricos en penumbra"
+            alt="Fondo de peña folklórica con guitarras e instrumentos acústicos"
             fill
             priority
-            className="object-cover object-center grayscale contrast-125 brightness-[0.22] opacity-40"
+            className="object-cover object-center contrast-110 brightness-[0.55] saturate-110 opacity-45"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#080407]/90 via-[#180516]/80 to-[#080407]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#080407_85%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#251023]/80 via-[#3a1837]/65 to-[#251023]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#251023_80%)]" />
         </div>
 
         <div className="relative mx-auto max-w-5xl px-6 py-24 sm:py-32 text-center">
           {/* Tag / Pre-heading */}
-          <div className="inline-flex items-center gap-2.5 border border-white/20 bg-black/40 px-4 py-1.5 text-[11px] font-light uppercase tracking-[0.3em] text-white backdrop-blur">
-            <Music className="size-3 text-white" strokeWidth={1.5} />
+          <div className="inline-flex items-center gap-2.5 border border-amber-400/35 bg-black/40 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.3em] text-amber-200 backdrop-blur">
+            <Music className="size-3 text-amber-400" strokeWidth={1.5} />
             <span>Peña Folklórica · Universidad Austral</span>
           </div>
 
           {/* Main Headline */}
-          <h1 className="mx-auto mt-8 max-w-4xl font-serif text-4xl font-bold uppercase tracking-wider text-white sm:text-6xl lg:text-7xl leading-[1.12]">
+          <h1 className="mx-auto mt-8 max-w-4xl font-serif text-4xl font-bold uppercase tracking-wider text-foreground sm:text-6xl lg:text-7xl leading-[1.12]">
             Una noche de folklore, baile, canto y amigos
           </h1>
 
-          <p className="mt-4 font-sans text-xs font-light uppercase tracking-[0.25em] text-white/75 sm:text-sm">
-            En Mariano Acosta 1610, Pilar
+          <p className="mt-4 font-sans text-xs font-light uppercase tracking-[0.25em] text-amber-200/80 sm:text-sm">
+            En Mariano Acosta 1611, Pilar
           </p>
 
-          <p className="mx-auto mt-6 max-w-2xl font-sans text-sm font-light leading-relaxed text-white/70 sm:text-base">
+          <p className="mx-auto mt-6 max-w-2xl font-sans text-sm font-light leading-relaxed text-foreground/75 sm:text-base">
             {event.description}
           </p>
 
-          {/* Centered details bar separated by fine white lines */}
-          <div className="mt-12 inline-flex flex-wrap items-center justify-center divide-y divide-white/15 border border-white/20 bg-[#140512]/90 backdrop-blur sm:divide-y-0 sm:divide-x">
-            <div className="flex items-center gap-2 px-5 py-3 text-xs font-light uppercase tracking-[0.2em] text-white/90">
-              <CalendarDays className="size-3.5 text-white" strokeWidth={1.5} />
-              <span>{dateLabel}</span>
+          {/* Centered details dock - Row 1: Date, Doors, Venue. Row 2: Price & Preventa centered */}
+          <div className="mx-auto mt-10 w-full max-w-4xl overflow-hidden rounded-sm border border-border bg-[#30132d]/90 shadow-2xl backdrop-blur">
+            {/* Fila 1: Día, Horarios y Ubicación en una sola fila */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border border-b border-border">
+              <div className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-light uppercase tracking-[0.15em] text-foreground/90 text-center">
+                <CalendarDays className="size-4 text-amber-300 shrink-0" strokeWidth={1.5} />
+                <span>{dateLabel}</span>
+              </div>
+              <div className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-light uppercase tracking-[0.15em] text-foreground/90 text-center">
+                <Clock3 className="size-4 text-amber-300 shrink-0" strokeWidth={1.5} />
+                <span>{DOORS_TEXT}</span>
+              </div>
+              <a
+                href={VENUE_MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-light uppercase tracking-[0.15em] text-foreground/90 transition-colors hover:text-amber-200 hover:bg-white/5 text-center"
+              >
+                <MapPin className="size-4 text-amber-300 shrink-0" strokeWidth={1.5} />
+                <span className="truncate">{event.venue}</span>
+              </a>
             </div>
-            <div className="flex items-center gap-2 px-5 py-3 text-xs font-light uppercase tracking-[0.2em] text-white/90">
-              <Clock3 className="size-3.5 text-white" strokeWidth={1.5} />
-              <span>{DOORS_TEXT}</span>
-            </div>
-            <a
-              href={VENUE_MAPS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-3 text-xs font-light uppercase tracking-[0.2em] text-white/90 transition-colors hover:text-white hover:bg-white/5"
-            >
-              <MapPin className="size-3.5 text-white" strokeWidth={1.5} />
-              <span>{event.venue}</span>
-            </a>
-            <div className="flex items-center gap-2 px-5 py-3 text-xs font-medium uppercase tracking-[0.2em] text-white bg-white/5">
-              <span>{PREVENTA_LABEL}</span>
-              <span className="font-serif text-sm font-bold tracking-normal">
+
+            {/* Fila 2: Precio con texto de preventa abajo centrado */}
+            <div className="flex flex-wrap items-center justify-center gap-3 bg-amber-400/10 px-6 py-4 text-center">
+              <span className="inline-flex items-center gap-1.5 rounded-sm border border-amber-400/35 bg-amber-400/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
+                <TicketIcon className="size-3.5 text-amber-300 shrink-0" strokeWidth={1.5} />
+                <span>{PREVENTA_LABEL}</span>
+              </span>
+              <span className="font-serif text-2xl font-bold tracking-tight text-amber-100 sm:text-3xl">
                 {formatPrice(unitPrice)}
               </span>
             </div>
@@ -141,13 +149,13 @@ export default async function Home() {
       <section id="entradas" className="scroll-mt-16 py-16 sm:py-24">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center">
-            <p className="text-xs font-light uppercase tracking-[0.3em] text-white/60">
+            <p className="text-xs font-medium uppercase tracking-[0.3em] text-amber-400">
               Entradas
             </p>
-            <h2 className="mt-2 font-serif text-3xl font-bold uppercase tracking-wider text-white sm:text-5xl">
+            <h2 className="mt-2 font-serif text-3xl font-bold uppercase tracking-wider text-foreground sm:text-5xl">
               Conseguí tu entrada hoy
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-xs sm:text-sm font-light leading-relaxed text-white/70">
+            <p className="mx-auto mt-4 max-w-xl text-xs sm:text-sm font-light leading-relaxed text-foreground/75">
               Pagá con Mercado Pago y recibí tu QR por email al instante.
               Disponibles en {PREVENTA_LABEL}. Una sola entrada, la que da todo:
               música, patio de comidas y {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
@@ -167,41 +175,41 @@ export default async function Home() {
       </section>
 
       {/* Trust & Details: 3-column clean line-divided block */}
-      <section className="border-t border-b border-white/15 bg-[#10040e]">
+      <section className="border-t border-b border-border bg-[#1c0a1a]">
         <div className="mx-auto max-w-5xl px-6 py-20">
-          <div className="grid divide-y divide-white/15 border border-white/15 bg-[#150513] sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+          <div className="grid divide-y divide-border border border-border bg-[#280e25] sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
             <div className="flex flex-col items-center p-8 text-center sm:p-10">
-              <div className="grid size-12 place-items-center rounded-sm border border-white/30 text-white">
-                <ShieldCheck className="size-6 text-white" strokeWidth={1.25} />
+              <div className="grid size-12 place-items-center rounded-sm border border-amber-400/40 bg-amber-400/10 text-amber-300">
+                <ShieldCheck className="size-6 text-amber-400" strokeWidth={1.5} />
               </div>
-              <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-white">
+              <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-foreground">
                 Pago seguro
               </h3>
-              <p className="mt-3 text-xs font-light leading-relaxed text-white/60">
+              <p className="mt-3 text-xs font-light leading-relaxed text-muted-foreground">
                 Procesado por Mercado Pago, con todos los medios de pago de
                 Argentina. No está permitida la venta a menores de edad.
               </p>
             </div>
             <div className="flex flex-col items-center p-8 text-center sm:p-10">
-              <div className="grid size-12 place-items-center rounded-sm border border-white/30 text-white">
-                <TicketIcon className="size-6 text-white" strokeWidth={1.25} />
+              <div className="grid size-12 place-items-center rounded-sm border border-amber-400/40 bg-amber-400/10 text-amber-300">
+                <TicketIcon className="size-6 text-amber-400" strokeWidth={1.5} />
               </div>
-              <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-white">
+              <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-foreground">
                 QR al instante
               </h3>
-              <p className="mt-3 text-xs font-light leading-relaxed text-white/60">
+              <p className="mt-3 text-xs font-light leading-relaxed text-muted-foreground">
                 Recibís tu código QR por email apenas confirmamos el pago.
                 Presentá tu QR en la entrada.
               </p>
             </div>
             <div className="flex flex-col items-center p-8 text-center sm:p-10">
-              <div className="grid size-12 place-items-center rounded-sm border border-white/30 text-white">
-                <Wine className="size-6 text-white" strokeWidth={1.25} />
+              <div className="grid size-12 place-items-center rounded-sm border border-amber-400/40 bg-amber-400/10 text-amber-300">
+                <Wine className="size-6 text-amber-400" strokeWidth={1.5} />
               </div>
-              <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-white">
+              <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-foreground">
                 {DEFAULT_ALCOHOL_ALLOWANCE} consumos
               </h3>
-              <p className="mt-3 text-xs font-light leading-relaxed text-white/60">
+              <p className="mt-3 text-xs font-light leading-relaxed text-muted-foreground">
                 Cada entrada incluye {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
                 alcohólicas. Los menores de edad no acceden a bebidas
                 alcohólicas.
