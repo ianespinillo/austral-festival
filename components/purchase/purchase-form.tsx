@@ -60,7 +60,7 @@ const PARTICIPATION_OPTIONS: {
   {
     value: "donacion",
     title: "Solo donar entradas",
-    desc: "Las entradas quedan para que la organización las entregue",
+    desc: "La organización entrega las entradas que donés",
     icon: Gift,
   },
 ];
@@ -170,7 +170,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
               <p className="mt-2 text-xs font-normal text-muted-foreground">
                 {soldOut
                   ? "Agotada"
-                  : `Disponibles (${PREVENTA_LABEL}) · cada entrada incluye ${DEFAULT_ALCOHOL_ALLOWANCE} bebidas alcohólicas`}
+                  : `Disponibles (${PREVENTA_LABEL}) · cada entrada permite ${DEFAULT_ALCOHOL_ALLOWANCE} bebidas alcohólicas`}
               </p>
             </div>
             <div className="font-serif text-4xl font-bold text-foreground sm:text-5xl tracking-tight">
@@ -249,7 +249,9 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="buyerEmail" className="text-xs uppercase font-medium tracking-[0.15em] text-foreground/80">
-                    Email (se envían todas las entradas aquí)
+                    {attending
+                      ? "Email (se envían las entradas aquí)"
+                      : "Email (se envía el comprobante aquí)"}
                   </Label>
                   <Input
                     id="buyerEmail"
@@ -400,8 +402,9 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                 <div>
                   <p className="font-semibold uppercase tracking-wider text-xs text-amber-300">Donación registrada</p>
                   <p className="mt-1 text-xs font-normal text-amber-200/90">
-                    Las <strong>{quantity}</strong> entradas quedan a disposición de la
-                    organización para entregarse. No hace falta cargar datos de asistentes.
+                    Las <strong>{quantity}</strong> entradas van a disposición de la
+                    organización para entregarse. No hace falta cargar datos de asistentes
+                    y no se generan códigos QR.
                   </p>
                 </div>
               </div>
@@ -410,7 +413,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
             {/* Total summary bar */}
             <div className="flex items-center justify-between border border-amber-400/30 bg-[#52314E] px-5 py-4">
               <div className="text-xs font-medium uppercase tracking-[0.2em] text-foreground/80">
-                {quantity} {quantity === 1 ? "entrada" : "entradas"} ·
+                {quantity} {quantity === 1 ? "entrada" : "entradas"}
               </div>
               <div className="font-serif text-2xl font-bold text-amber-300 tracking-wide">
                 {formatPrice(total)}
@@ -430,11 +433,13 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                   Preparando pago…
                 </>
               ) : (
-                `Pagar ${formatPrice(total)} con Mercado Pago`
+                `Pagar ${formatPrice(total)}`
               )}
             </Button>
             <p className="text-center text-[11px] font-normal uppercase tracking-[0.2em] text-muted-foreground/75">
-              Al completar el pago recibís tu código QR por email.
+              {attending
+                ? "Al completar el pago recibís tu código QR por email."
+                : "Al completar el pago recibís tu comprobante de donación por email."}
             </p>
             <p className="text-center text-[11px] font-normal uppercase tracking-[0.2em] text-muted-foreground/50">
               No está permitida la venta de bebidas alcohólicas a menores de edad.

@@ -81,10 +81,14 @@ export default async function CompraExitosaPage({
               {isApproved
                 ? needsReconciliation
                   ? "Confirmando el pago con Mercado Pago…"
-                  : `Revisá tu email: enviamos ${
-                      purchase ? `${purchase.quantity} entrada(s)` : "las entradas"
-                    } con su código QR.`
-                : "Tu pago quedó pendiente. Apenas se acredite, recibirás tus entradas por email."}
+                  : isDonation
+                    ? "Revisá tu email: te enviamos tu comprobante de donación."
+                    : `Revisá tu email: enviamos ${
+                        purchase ? `${purchase.quantity} entrada(s)` : "las entradas"
+                      } con su código QR.`
+                : isDonation
+                  ? "Tu donación quedó pendiente. Apenas se acredite, recibirás tu comprobante por email."
+                  : "Tu pago quedó pendiente. Apenas se acredite, recibirás tus entradas por email."}
             </p>
           </div>
 
@@ -92,6 +96,7 @@ export default async function CompraExitosaPage({
             <ReconcilePoller
               purchaseId={purchaseId!}
               paymentId={paymentId}
+              isDonation={isDonation}
             />
           )}
 
@@ -119,7 +124,8 @@ export default async function CompraExitosaPage({
                   </p>
                   <Separator className="bg-border" />
                   <p className="flex items-center gap-2 font-normal text-muted-foreground">
-                    <MailCheck className="size-3.5 text-amber-400" strokeWidth={1.5} /> Enviadas a{" "}
+                    <MailCheck className="size-3.5 text-amber-400" strokeWidth={1.5} />{" "}
+                    {isDonation ? "Comprobante enviado a" : "Enviadas a"}{" "}
                     <span className="font-medium text-foreground">
                       {purchase.buyerEmail}
                     </span>

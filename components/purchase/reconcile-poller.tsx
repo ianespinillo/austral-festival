@@ -10,6 +10,7 @@ interface ReconcilePollerProps {
   paymentId?: string | null;
   maxAttempts?: number;
   intervalMs?: number;
+  isDonation?: boolean;
 }
 
 export function ReconcilePoller({
@@ -17,6 +18,7 @@ export function ReconcilePoller({
   paymentId,
   maxAttempts = 8,
   intervalMs = 3000,
+  isDonation = false,
 }: ReconcilePollerProps) {
   const router = useRouter();
   const [attempt, setAttempt] = useState(0);
@@ -62,8 +64,11 @@ export function ReconcilePoller({
       <div className="w-full rounded-xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-800">
         <p className="font-semibold">No pudimos confirmar tu pago automáticamente.</p>
         <p className="mt-1">
-          Si ya abonaste, recibirás tus entradas por email en los próximos
-          minutos. Si el problema persiste, contactanos.
+          Si ya abonaste,{" "}
+          {isDonation
+            ? "recibirás tu comprobante de donación por email en los próximos minutos."
+            : "recibirás tus entradas por email en los próximos minutos."}{" "}
+          Si el problema persiste, contactanos.
         </p>
       </div>
     );

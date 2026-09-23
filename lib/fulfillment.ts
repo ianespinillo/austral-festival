@@ -16,6 +16,12 @@ export async function fulfillPurchase(purchaseId: string) {
   if (!purchase) return { fulfilled: false, reason: "purchase_not_found" };
   if (purchase.status !== "paid") return { fulfilled: false, reason: `status_${purchase.status}` };
 
+  const isDonation = purchase.buyerParticipation === "donacion";
+  if (isDonation) {
+    await sendDonationReceipt(purchase);
+    return { fulfilled: true, tickets: [] };
+  }
+
   type GuestRecord = {
     name: string;
     dni: string;
@@ -27,25 +33,16 @@ export async function fulfillPurchase(purchaseId: string) {
   const guests: GuestRecord[] = Array.isArray(purchase.guests)
     ? (purchase.guests as GuestRecord[])
     : [];
-  const isDonation = purchase.buyerParticipation === "donacion";
 
   const payloads = [];
   for (let i = 0; i < purchase.quantity; i++) {
     const guest = guests[i];
-    let guestName: string;
-    let guestDni: string;
-
-    if (isDonation) {
-      guestName = `Donación (${i + 1}/${purchase.quantity})`;
-      guestDni = purchase.buyerDni ?? "";
-    } else {
-      guestName =
-        guest?.name ??
-        (purchase.quantity > 1
-          ? `${purchase.buyerName} (${i + 1}/${purchase.quantity})`
-          : purchase.buyerName);
-      guestDni = guest?.dni ?? purchase.buyerDni ?? "";
-    }
+    const guestName =
+      guest?.name ??
+      (purchase.quantity > 1
+        ? `${purchase.buyerName} (${i + 1}/${purchase.quantity})`
+        : purchase.buyerName);
+    const guestDni = guest?.dni ?? purchase.buyerDni ?? "";
 
     const birthDate = guest?.birthDate ? new Date(guest.birthDate) : null;
     const alcoholAllowance =
@@ -123,7 +120,7 @@ export async function fulfillPurchase(purchaseId: string) {
   try {
     await sendEmail({
       to: purchase.buyerEmail,
-      subject: `${isDonation ? "Comprobante de donación" : "Tus entradas"} — ${event.name}`,
+      subject: `Tus entradas — ${event.name}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -150,7 +147,7 @@ export async function fulfillPurchase(purchaseId: string) {
           <div class="container">
             <div class="header">
               <h1>${event.name}</h1>
-              <p>${isDonation ? "Tu donación fue registrada" : "Tu compra fue confirmada"}</p>
+              <p>Tu compra fue confirmada</p>
             </div>
             <div class="body">
               <p>Hola <strong>${purchase.buyerName}</strong>,</p>
@@ -161,11 +158,9 @@ export async function fulfillPurchase(purchaseId: string) {
                 <p><strong>Horario:</strong> Apertura 20:00 hs · Cierre 22:00 hs</p>
                 <p><strong>Monto pagado:</strong> $${purchase.totalAmount.toLocaleString("es-AR")}</p>
               </div>
-              ${isDonation
-                ? `<div class="info-box"><strong>Entradas donadas:</strong> Estas entradas serán entregadas por la organización. Presentá este comprobante en la entrada.</div>`
-                : `<h3 style="margin-top:24px">Asistentes</h3>
+              <h3 style="margin-top:24px">Asistentes</h3>
               ${attendeeRows}
-              ${hasMinors ? `<div class="minor-note"><strong>Menores de edad:</strong> Las personas menores de 18 años no tendrán acceso a bebidas alcohólicas en la peña.</div>` : ""}`}
+              ${hasMinors ? `<div class="minor-note"><strong>Menores de edad:</strong> Las personas menores de 18 años no tendrán acceso a bebidas alcohólicas en la peña.</div>` : ""}
               <h3 style="margin-top:24px">Cómo usar tu entrada</h3>
               <ul>
                 <li>Presentá el <strong>código QR</strong> adjunto (o tu <strong>DNI</strong>) en la entrada del evento.</li>
@@ -190,6 +185,78 @@ export async function fulfillPurchase(purchaseId: string) {
     fulfilled: true,
     tickets: tickets.map((t) => t.qrCode),
   };
+}
+
+async function sendDonationReceipt(purchase: {
+  buyerName: string;
+  buyerEmail: string;
+  quantity: number;
+  totalAmount: number;
+  referringVolunteer: string | null;
+  tier: { name: string; event: { name: string; date: Date; venue: string } };
+}) {
+  const event = purchase.tier.event;
+  const eventDate = new Date(event.date).toLocaleString("es-AR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  try {
+    await sendEmail({
+      to: purchase.buyerEmail,
+      subject: `Comprobante de donación — ${event.name}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: Arial, sans-serif; background: #faf8f5; margin: 0; padding: 24px; }
+            .container { max-width: 560px; margin: 0 auto; background: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+            .header { background: #1c1917; color: #fafaf9; padding: 28px; text-align: center; }
+            .header h1 { margin: 0 0 4px; font-size: 22px; }
+            .header p { margin: 0; opacity: 0.75; }
+            .body { padding: 28px; color: #1c1917; }
+            .ticket { background: #f5f5f4; border-radius: 10px; padding: 16px; margin: 12px 0; border: 1px solid #e7e5e4; }
+            .ticket p { margin: 4px 0; }
+            .info-box { background: #EAF0F6; border: 1px solid #4FA3D1; border-radius: 8px; padding: 12px; margin: 14px 0; font-size: 13px; color: #0E4A63; }
+            .footer { text-align: center; padding: 18px; color: #78716c; font-size: 12px; border-top: 1px solid #e7e5e4; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>${event.name}</h1>
+              <p>Tu donación fue registrada</p>
+            </div>
+            <div class="body">
+              <p>Hola <strong>${purchase.buyerName}</strong>,</p>
+              <p><strong>Donaste ${purchase.quantity} entrada(s)</strong> para que la organización las entregue a quienes no puedan costearlas.</p>
+              <div class="ticket">
+                <p><strong>Fecha del evento:</strong> ${eventDate}</p>
+                <p><strong>Lugar:</strong> <a href="${VENUE_MAPS_URL}" style="color:#0E4A63">${event.venue}</a></p>
+                <p><strong>Horario:</strong> Apertura 20:00 hs · Cierre 22:00 hs</p>
+                <p><strong>Monto donado:</strong> $${purchase.totalAmount.toLocaleString("es-AR")}</p>
+              </div>
+              <div class="info-box">
+                <strong>Este es tu comprobante de donación.</strong> Las entradas donadas quedan a cargo de la organización y serán entregadas por ella. No recibís códigos QR por esta donación.
+              </div>
+              ${purchase.referringVolunteer ? `<p>Viene de parte de <strong>${purchase.referringVolunteer}</strong>.</p>` : ""}
+              <p>¡Gracias por apoyar la peña!</p>
+            </div>
+            <div class="footer">Peña Folklórica · Universidad Austral</div>
+          </div>
+        </body>
+        </html>
+      `,
+    });
+  } catch (error) {
+    console.error("[fulfillment] donation receipt email failed", error);
+  }
 }
 
 export type ClaimResult = {

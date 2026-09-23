@@ -145,12 +145,14 @@ export async function createCheckoutPreference({
     if (!tier || !tier.isActive) {
       return { ok: false, error: "La entrada seleccionada no está disponible." };
     }
-    const available = tier.maxStock - tier.soldCount;
-    if (available < qty) {
-      return {
-        ok: false,
-        error: `Solo quedan ${available} entradas de este tipo.`,
-      };
+    if (!isDonation) {
+      const available = tier.maxStock - tier.soldCount;
+      if (available < qty) {
+        return {
+          ok: false,
+          error: `Solo quedan ${available} entradas de este tipo.`,
+        };
+      }
     }
 
     const totalAmount = tier.price * qty;
@@ -175,7 +177,9 @@ export async function createCheckoutPreference({
     const preference = await createPreference({
       items: [
         {
-          title: `Entrada ${tier.name} — Peña Folk Austral`,
+          title: isDonation
+            ? `Donación ${qty} ${qty === 1 ? "entrada" : "entradas"} ${tier.name} — Peña Folk Austral`
+            : `Entrada ${tier.name} — Peña Folk Austral`,
           quantity: qty,
           unitPrice: tier.price,
         },
