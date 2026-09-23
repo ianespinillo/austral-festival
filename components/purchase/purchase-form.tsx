@@ -134,7 +134,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
 
   if (!tier) {
     return (
-      <div className="mx-auto mt-10 max-w-3xl border border-border bg-[#4A2C45] p-8 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground shadow-sm">
+      <div className="mx-auto mt-10 max-w-3xl border border-border bg-[#F0E6D0] p-8 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground shadow-sm">
         No hay entradas a la venta por ahora.
       </div>
     );
@@ -144,16 +144,16 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
 
   return (
     <div className="mx-auto mt-12 max-w-3xl">
-      <div className="overflow-hidden border border-border bg-[#4A2C45] shadow-2xl">
+      <div className="overflow-hidden border border-border bg-[#FCF6E9] shadow-2xl">
         {/* Ticket Top Banner */}
-        <div className="flex items-center justify-between gap-4 border-b border-border bg-[#52314E] px-6 py-4 text-foreground">
+        <div className="flex items-center justify-between gap-4 border-b border-border bg-[#EFE3C9] px-6 py-4 text-foreground">
           <div className="flex items-center gap-2.5">
-            <Music className="size-4 text-amber-400" strokeWidth={1.5} />
+            <Music className="size-4 text-amber-700" strokeWidth={1.5} />
             <span className="font-serif text-xs font-bold uppercase tracking-[0.2em] text-foreground">
               Peña Folklórica Austral
             </span>
           </div>
-          <span className="border border-amber-400/30 bg-amber-500/15 px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-300">
+          <span className="border border-amber-600/40 bg-amber-500/15 px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-800">
             Pilar · 2026
           </span>
         </div>
@@ -161,7 +161,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
         <div className="px-6 py-8 sm:px-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-400">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-700">
                 Entradas
               </p>
               <h3 className="mt-1 font-serif text-2xl font-bold uppercase tracking-wider text-foreground sm:text-3xl">
@@ -180,14 +180,14 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
 
           {/* Perforated ticket divider with cutouts */}
           <div aria-hidden className="relative my-8">
-            <div className="absolute top-1/2 -left-10 size-6 -translate-y-1/2 rounded-full bg-[#361E32] ring-1 ring-border" />
-            <div className="absolute top-1/2 -right-10 size-6 -translate-y-1/2 rounded-full bg-[#361E32] ring-1 ring-border" />
+            <div className="absolute top-1/2 -left-10 size-6 -translate-y-1/2 rounded-full bg-[#F6EEDD] ring-1 ring-border" />
+            <div className="absolute top-1/2 -right-10 size-6 -translate-y-1/2 rounded-full bg-[#F6EEDD] ring-1 ring-border" />
             <div className="border-t border-dashed border-border" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-5">
-              <h4 className="font-serif text-xs font-bold uppercase tracking-[0.2em] text-amber-400">
+              <h4 className="font-serif text-xs font-bold uppercase tracking-[0.2em] text-amber-700">
                 Datos del comprador
               </h4>
 
@@ -199,10 +199,10 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                     <label
                       key={option.value}
                       className={cn(
-                        "relative flex cursor-pointer items-start gap-3 border p-4 transition-all has-[:focus-visible]:border-amber-400 has-[:focus-visible]:ring-1 has-[:focus-visible]:ring-amber-400/40",
+                        "relative flex cursor-pointer items-start gap-3 border p-4 transition-all has-[:focus-visible]:border-amber-600 has-[:focus-visible]:ring-1 has-[:focus-visible]:ring-amber-600/40",
                         active
-                          ? "border-amber-400 bg-amber-500/15 text-foreground"
-                          : "border-border bg-[#3D233B] text-muted-foreground hover:border-amber-400/40"
+                          ? "border-amber-600 bg-amber-500/15 text-foreground"
+                          : "border-border bg-[#F0E6D0] text-muted-foreground hover:border-amber-600/40"
                       )}
                     >
                       <input
@@ -216,14 +216,14 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                       <span
                         className={cn(
                           "mt-0.5 grid size-4 shrink-0 place-items-center border transition-colors",
-                          active ? "border-amber-400 bg-amber-400" : "border-border bg-[#2A1527]"
+                          active ? "border-amber-600 bg-amber-600" : "border-border bg-[#B7A182]"
                         )}
                       >
-                        {active && <CheckCircle2 className="size-3 text-[#1e0a1c]" />}
+                        {active && <CheckCircle2 className="size-3 text-[#3A2210]" />}
                       </span>
                       <span className="grid gap-0.5">
                         <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-foreground">
-                          <Icon className="size-3.5 text-amber-400" strokeWidth={1.5} />
+                          <Icon className="size-3.5 text-amber-700" strokeWidth={1.5} />
                           {option.title}
                         </span>
                         <span className="text-[11px] font-normal text-muted-foreground">{option.desc}</span>
@@ -244,7 +244,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                     onChange={(e) => setBuyerName(e.target.value)}
                     placeholder="Ej: María González"
                     required
-                    className="border-border bg-[#2A1527] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
+                    className="border-border bg-[#FDF9F0] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-600 focus-visible:ring-amber-600/30"
                   />
                 </div>
                 <div className="space-y-2">
@@ -260,7 +260,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                     onChange={(e) => setBuyerEmail(e.target.value)}
                     placeholder="maria@example.com"
                     required
-                    className="border-border bg-[#2A1527] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
+                    className="border-border bg-[#FDF9F0] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-600 focus-visible:ring-amber-600/30"
                   />
                 </div>
               </div>
@@ -274,7 +274,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                   value={referringVolunteer}
                   onChange={(e) => setReferringVolunteer(e.target.value)}
                   placeholder="Ej: Ana Mendoza"
-                  className="border-border bg-[#2A1527] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
+                  className="border-border bg-[#FDF9F0] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-600 focus-visible:ring-amber-600/30"
                 />
               </div>
 
@@ -287,12 +287,12 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                     value={String(quantity)}
                     onValueChange={handleQuantityChange}
                   >
-                    <SelectTrigger id="quantity" className="border-border bg-[#2A1527] text-foreground focus-visible:border-amber-400">
+                    <SelectTrigger id="quantity" className="border-border bg-[#FDF9F0] text-foreground focus-visible:border-amber-600">
                       <SelectValue placeholder="Cantidad" />
                     </SelectTrigger>
-                    <SelectContent className="border-border bg-[#3D233B] text-foreground shadow-2xl">
+                    <SelectContent className="border-border bg-[#FCF6E9] text-foreground shadow-2xl">
                       {Array.from({ length: 6 }, (_, i) => i + 1).map((n) => (
-                        <SelectItem key={n} value={String(n)} className="focus:bg-amber-500/20 focus:text-amber-200">
+                        <SelectItem key={n} value={String(n)} className="focus:bg-amber-500/20 focus:text-amber-800">
                           {n} {n === 1 ? "entrada" : "entradas"}
                         </SelectItem>
                       ))}
@@ -304,7 +304,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
 
             {attending ? (
               <div className="space-y-4">
-                <h4 className="font-serif text-xs font-bold uppercase tracking-[0.2em] text-amber-400">
+                <h4 className="font-serif text-xs font-bold uppercase tracking-[0.2em] text-amber-700">
                   Datos de cada asistente
                 </h4>
                 <p className="text-[11px] font-normal text-muted-foreground">
@@ -314,10 +314,10 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                 {guests.map((guest, i) => (
                   <div
                     key={i}
-                    className="border border-border bg-[#3D233B] p-4 shadow-sm"
+                    className="border border-border bg-[#F0E6D0] p-4 shadow-sm"
                   >
                     <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-foreground">
-                      <UserRound className="h-3.5 w-3.5 text-amber-400" strokeWidth={1.5} />
+                      <UserRound className="h-3.5 w-3.5 text-amber-700" strokeWidth={1.5} />
                       Asistente {i + 1}
                     </p>
                     <div className="grid gap-3 sm:grid-cols-3">
@@ -331,7 +331,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                           onChange={(e) => updateGuest(i, "name", e.target.value)}
                           placeholder="Ej: Juan Pérez"
                           required
-                          className="border-border bg-[#2A1527] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
+                          className="border-border bg-[#FDF9F0] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-600 focus-visible:ring-amber-600/30"
                         />
                       </div>
                       <div className="space-y-1">
@@ -347,7 +347,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                           }
                           placeholder="Ej: 40123456"
                           required
-                          className="border-border bg-[#2A1527] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
+                          className="border-border bg-[#FDF9F0] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-600 focus-visible:ring-amber-600/30"
                         />
                       </div>
                       <div className="space-y-1">
@@ -363,7 +363,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                           }
                           max={todayStr}
                           required
-                          className="border-border bg-[#2A1527] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-400 focus-visible:ring-amber-400/30"
+                          className="border-border bg-[#FDF9F0] text-foreground placeholder:text-muted-foreground/50 focus-visible:border-amber-600 focus-visible:ring-amber-600/30"
                         />
                       </div>
                       <div className="space-y-1 sm:col-span-2">
@@ -376,15 +376,15 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                             updateGuest(i, "diet", value ?? "regular")
                           }
                         >
-                          <SelectTrigger id={`guest-diet-${i}`} className="border-border bg-[#2A1527] text-foreground focus-visible:border-amber-400">
+                          <SelectTrigger id={`guest-diet-${i}`} className="border-border bg-[#FDF9F0] text-foreground focus-visible:border-amber-600">
                             <SelectValue placeholder="Seleccioná el menú" />
                           </SelectTrigger>
-                          <SelectContent className="border-border bg-[#3D233B] text-foreground shadow-2xl">
+                          <SelectContent className="border-border bg-[#FCF6E9] text-foreground shadow-2xl">
                             {DIET_OPTIONS.map((option) => (
                               <SelectItem
                                 key={option.value}
                                 value={option.value}
-                                className="focus:bg-amber-500/20 focus:text-amber-200"
+                                className="focus:bg-amber-500/20 focus:text-amber-800"
                               >
                                 {option.label}
                               </SelectItem>
@@ -397,11 +397,11 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                 ))}
               </div>
             ) : (
-              <div className="flex items-start gap-3 border border-dashed border-amber-400/30 bg-amber-500/15 p-4 text-sm text-amber-200">
-                <Heart className="mt-0.5 size-4 shrink-0 text-amber-400" strokeWidth={1.5} />
+              <div className="flex items-start gap-3 border border-dashed border-amber-600/40 bg-amber-500/15 p-4 text-sm text-amber-800">
+                <Heart className="mt-0.5 size-4 shrink-0 text-amber-700" strokeWidth={1.5} />
                 <div>
-                  <p className="font-semibold uppercase tracking-wider text-xs text-amber-300">Donación registrada</p>
-                  <p className="mt-1 text-xs font-normal text-amber-200/90">
+<p className="font-semibold uppercase tracking-wider text-xs text-amber-800">Donación registrada</p>
+                  <p className="mt-1 text-xs font-normal text-amber-800/90">
                     Las <strong>{quantity}</strong> entradas van a disposición de la
                     organización para entregarse. No hace falta cargar datos de asistentes
                     y no se generan códigos QR.
@@ -411,11 +411,11 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
             )}
 
             {/* Total summary bar */}
-            <div className="flex items-center justify-between border border-amber-400/30 bg-[#52314E] px-5 py-4">
+            <div className="flex items-center justify-between border border-amber-600/30 bg-[#EFE3C9] px-5 py-4">
               <div className="text-xs font-medium uppercase tracking-[0.2em] text-foreground/80">
                 {quantity} {quantity === 1 ? "entrada" : "entradas"}
               </div>
-              <div className="font-serif text-2xl font-bold text-amber-300 tracking-wide">
+              <div className="font-serif text-2xl font-bold text-amber-800 tracking-wide">
                 {formatPrice(total)}
               </div>
             </div>
@@ -424,12 +424,12 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
             <Button
               type="submit"
               size="lg"
-              className="h-12 w-full bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#1e0a1c] font-bold text-xs uppercase tracking-[0.25em] transition-all shadow-md shadow-amber-900/10 hover:shadow-lg border border-[#ECC472]/60 disabled:opacity-50 cursor-pointer"
+              className="h-12 w-full bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#3A2210] font-bold text-xs uppercase tracking-[0.25em] transition-all shadow-md shadow-amber-900/15 hover:shadow-lg border border-[#ECC472]/60 disabled:opacity-50 cursor-pointer"
               disabled={loading || soldOut}
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 size-4 animate-spin text-[#1e0a1c]" />{" "}
+                  <Loader2 className="mr-2 size-4 animate-spin text-[#3A2210]" />{" "}
                   Preparando pago…
                 </>
               ) : (
