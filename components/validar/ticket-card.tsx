@@ -140,11 +140,11 @@ export function TicketCard({
   const minor = ticket.alcoholAllowance === 0;
 
   return (
-    <Card className="border border-border bg-[#1f0a1c] text-foreground shadow-xl">
+    <Card className="border border-border bg-[#FCF6E9] text-foreground shadow-xl">
       <CardContent className="space-y-5 p-6">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-amber-400/80">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-700">
               {ticket.eventName}
             </p>
             <h3 className="font-serif text-lg font-bold uppercase tracking-wider text-foreground">
@@ -152,8 +152,8 @@ export function TicketCard({
             </h3>
           </div>
           {checkedIn ? (
-            <Badge variant="outline" className="border-amber-400/40 bg-amber-400/10 text-amber-200 font-medium text-[10px] uppercase tracking-[0.2em]">
-              <CheckCircle2 className="mr-1.5 size-3 text-amber-400" strokeWidth={1.5} /> Ingresó{" "}
+            <Badge variant="outline" className="border-amber-600/40 bg-amber-500/15 text-amber-800 font-medium text-[10px] uppercase tracking-[0.2em]">
+              <CheckCircle2 className="mr-1.5 size-3 text-amber-700" strokeWidth={1.5} /> Ingresó{" "}
               {ticket.checkedInAt ? formatDate(ticket.checkedInAt) : ""}
             </Badge>
           ) : (
@@ -164,7 +164,7 @@ export function TicketCard({
         </div>
 
         {/* Datos físicos / de identificación del asistente */}
-        <div className="border border-border bg-[#280d24] p-4 text-foreground">
+        <div className="border border-border bg-[#F0E6D0] p-4 text-foreground shadow-sm">
           <div className="flex items-start justify-between gap-3">
             <div className="grid gap-1.5 text-xs">
               <p className="font-serif text-base font-bold uppercase tracking-wide text-foreground">
@@ -176,7 +176,7 @@ export function TicketCard({
               </p>
               {ticket.holderBirthDate && (
                 <p className="flex items-center gap-1.5 text-[11px] font-light text-muted-foreground">
-                  <CalendarClock className="size-3.5 text-amber-400" strokeWidth={1.5} />
+                  <CalendarClock className="size-3.5 text-amber-700" strokeWidth={1.5} />
                   Nacimiento:{" "}
                   {new Date(ticket.holderBirthDate).toLocaleDateString("es-AR")}
                   {ticket.holderAge !== null && ` · ${ticket.holderAge} años`}
@@ -184,7 +184,7 @@ export function TicketCard({
               )}
               {ticket.diet !== "regular" && (
                 <p className="flex items-center gap-1.5 text-[11px] font-light text-foreground">
-                  <UtensilsCrossed className="size-3.5 text-amber-400" strokeWidth={1.5} />
+                  <UtensilsCrossed className="size-3.5 text-amber-700" strokeWidth={1.5} />
                   Menú: {dietLabel(ticket.diet)}
                 </p>
               )}
@@ -193,7 +193,7 @@ export function TicketCard({
               {minor ? (
                 <Badge
                   variant="outline"
-                  className="border-red-400/50 bg-red-950/30 text-red-300 text-[10px] font-light uppercase tracking-[0.15em]"
+                  className="border-red-500/40 bg-red-100/80 text-red-700 text-[10px] font-light uppercase tracking-[0.15em]"
                 >
                   <ShieldAlert className="mr-1 size-3" />
                   Menor de edad
@@ -201,9 +201,9 @@ export function TicketCard({
               ) : (
                 <Badge
                   variant="outline"
-                  className="border-amber-400/30 bg-amber-400/10 text-amber-200 text-[10px] font-medium uppercase tracking-[0.15em]"
+                  className="border-amber-600/40 bg-amber-500/15 text-amber-800 text-[10px] font-medium uppercase tracking-[0.15em]"
                 >
-                  <ShieldCheck className="mr-1 size-3 text-amber-400" strokeWidth={1.5} />
+                  <ShieldCheck className="mr-1 size-3 text-amber-700" strokeWidth={1.5} />
                   Mayor de edad
                 </Badge>
               )}
@@ -221,9 +221,9 @@ export function TicketCard({
 
         <div className="grid gap-1 text-xs font-light text-muted-foreground">
           <p className="flex items-center gap-2">
-            <CalendarDays className="size-3.5 text-amber-400" strokeWidth={1.5} />
+            <CalendarDays className="size-3.5 text-amber-700" strokeWidth={1.5} />
             {formatDate(ticket.eventDate)}
-            <MapPin className="ml-2 size-3.5 text-amber-400" strokeWidth={1.5} />
+            <MapPin className="ml-2 size-3.5 text-amber-700" strokeWidth={1.5} />
             {ticket.eventVenue}
           </p>
         </div>
@@ -233,11 +233,11 @@ export function TicketCard({
         <div className="space-y-3">
           <div className="flex items-center justify-between text-xs">
             <span className="flex items-center gap-2 font-serif uppercase tracking-wider text-foreground">
-              <Wine className="size-3.5 text-amber-400" strokeWidth={1.5} />
+              <Wine className="size-3.5 text-amber-700" strokeWidth={1.5} />
               Consumos (alcohólicos)
             </span>
             <span
-              className={limitReached ? "font-semibold text-red-400" : "font-mono font-medium text-amber-300"}
+              className={limitReached ? "font-semibold text-red-600" : "font-mono font-bold text-foreground"}
             >
               {ticket.alcoholicServed}/{ticket.maxAlcoholic}
             </span>
@@ -246,7 +246,7 @@ export function TicketCard({
             <>
               <Progress
                 value={(ticket.alcoholicServed / ticket.maxAlcoholic) * 100}
-                className="h-1.5 bg-black/40 [&>div]:bg-amber-400"
+                className="h-1.5 bg-amber-900/15 [&>div]:bg-amber-600"
               />
               <p className="text-[11px] font-light text-muted-foreground">
                 {limitReached
@@ -269,12 +269,12 @@ export function TicketCard({
               variant="default"
               onClick={handleCheckIn}
               disabled={busy !== null}
-              className="h-10 bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#1e0a1c] font-bold text-xs uppercase tracking-[0.2em] transition-all shadow-md shadow-black/20 hover:shadow-lg border border-[#ECC472]/60 sm:flex-1 cursor-pointer"
+              className="h-10 bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#3A2210] font-bold text-xs uppercase tracking-[0.2em] transition-all shadow-md shadow-amber-900/15 hover:shadow-lg border border-[#ECC472]/60 sm:flex-1 cursor-pointer"
             >
               {busy === "checkin" ? (
-                <Loader2 className="mr-2 size-3.5 animate-spin text-[#1e0a1c]" />
+                <Loader2 className="mr-2 size-3.5 animate-spin text-[#3A2210]" />
               ) : (
-                <UserCheck className="mr-2 size-3.5 text-[#1e0a1c]" strokeWidth={1.5} />
+                <UserCheck className="mr-2 size-3.5 text-[#3A2210]" strokeWidth={1.5} />
               )}
               Validar ingreso
             </Button>
@@ -283,25 +283,25 @@ export function TicketCard({
             variant="outline"
             onClick={() => handleServe("alcoholic")}
             disabled={busy !== null || limitReached || !checkedIn}
-            className="h-10 border-border text-foreground hover:bg-white/5 text-xs font-light uppercase tracking-[0.15em] sm:flex-1"
+            className="h-10 border-border text-foreground hover:bg-amber-500/15 text-xs font-medium uppercase tracking-[0.15em] sm:flex-1 cursor-pointer"
           >
-            <Wine className="mr-2 size-3.5 text-amber-400" strokeWidth={1.5} />
+            <Wine className="mr-2 size-3.5 text-amber-700" strokeWidth={1.5} />
             Servir alcohólica
           </Button>
           <Button
             variant="outline"
             onClick={() => handleServe("non_alcoholic")}
             disabled={busy !== null || !checkedIn}
-            className="h-10 border-border text-foreground hover:bg-white/5 text-xs font-light uppercase tracking-[0.15em] sm:flex-1"
+            className="h-10 border-border text-foreground hover:bg-amber-500/15 text-xs font-medium uppercase tracking-[0.15em] sm:flex-1 cursor-pointer"
           >
-            <GlassWater className="mr-2 size-3.5 text-amber-400" strokeWidth={1.5} />
+            <GlassWater className="mr-2 size-3.5 text-amber-700" strokeWidth={1.5} />
             Servir sin alcohol
           </Button>
         </div>
 
         {ticket.drinkRedemptions.length > 0 && (
-          <div className="border border-border bg-[#240c20] p-4 text-xs">
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-amber-400/80">
+          <div className="border border-border bg-[#F0E6D0] p-4 text-xs shadow-sm">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-700">
               Últimos consumos
             </p>
             <div className="mt-3 space-y-2">
@@ -312,9 +312,9 @@ export function TicketCard({
                 >
                   <span className="flex items-center gap-2">
                     {redemption.drinkType === "alcoholic" ? (
-                      <Wine className="size-3 text-amber-400" strokeWidth={1.5} />
+                      <Wine className="size-3 text-amber-700" strokeWidth={1.5} />
                     ) : (
-                      <GlassWater className="size-3 text-amber-400" strokeWidth={1.5} />
+                      <GlassWater className="size-3 text-amber-700" strokeWidth={1.5} />
                     )}
                     {redemption.drinkType === "alcoholic"
                       ? "Alcohólica"
@@ -324,11 +324,11 @@ export function TicketCard({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-6 px-2 text-[10px] font-light uppercase tracking-wider text-muted-foreground hover:text-amber-300 hover:bg-white/5"
+                    className="h-6 px-2 text-[10px] font-light uppercase tracking-wider text-muted-foreground hover:text-amber-700 hover:bg-amber-500/15 cursor-pointer"
                     disabled={busy !== null}
                     onClick={() => handleUndo(redemption.id)}
                   >
-                    <Undo2 className="mr-1 size-3 text-amber-400" /> Deshacer
+                    <Undo2 className="mr-1 size-3 text-amber-700" /> Deshacer
                   </Button>
                 </div>
               ))}

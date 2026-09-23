@@ -12,10 +12,10 @@
     --font-display: var(--font-serif);
     --font-heading: var(--font-serif);
     --font-mono: var(--font-geist-mono);
-    --color-plum: var(--plum);
-    --color-plum-deep: var(--plum-deep);
-    --color-plum-card: var(--plum-card);
-    --color-plum-border: var(--plum-border);
+    --color-cacao: var(--cacao);
+    --color-cacao-deep: var(--cacao-deep);
+    --color-cacao-card: var(--cacao-card);
+    --color-cacao-border: var(--cacao-border);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -52,52 +52,52 @@
     --font-serif: 'Playfair Display', serif;
     --font-display: 'Playfair Display', serif;
 
-    /* Lighter, richer warm wine / bordeaux nocturno */
-    --background: #251023;
-    --foreground: #FFF8F0;
+    /* Peña familiar: crema cálido, miel y marrones de la tierra */
+    --background: #F6EEDD;
+    --foreground: #3B2A1B;
 
-    /* Deep wine & warm plum blocks */
-    --plum-deep: #1c0a1a;
-    --plum: #381734;
-    --plum-card: #30132d;
-    --plum-border: rgba(245, 215, 185, 0.20);
+    /* Marrón cacao: anclas oscuras (overlay de foto del hero) */
+    --cacao-deep: #2B1D11;
+    --cacao: #3A2A1A;
+    --cacao-card: #4A3726;
+    --cacao-border: rgba(43, 29, 17, 0.25);
 
-    --card: #30132d;
-    --card-foreground: #FFF8F0;
-    --popover: #341530;
-    --popover-foreground: #FFF8F0;
+    --card: #FCF6E9;
+    --card-foreground: #3B2A1B;
+    --popover: #FCF6E9;
+    --popover-foreground: #3B2A1B;
 
-    /* Refined warm champagne primary CTA */
-    --amber-gold: #E5AC55;
-    --primary: #FBF3E8;
-    --primary-foreground: #251023;
+    /* Miel / caramelo */
+    --amber-gold: #C08A3E;
+    --primary: #8A5A26;
+    --primary-foreground: #FDF7EA;
 
-    /* Wine secondary */
-    --secondary: #3d1938;
-    --secondary-foreground: #FFF8F0;
+    /* Tan */
+    --secondary: #F0E6D0;
+    --secondary-foreground: #3B2A1B;
 
-    --muted: #341530;
-    --muted-foreground: rgba(255, 235, 220, 0.72);
+    --muted: #F0E6D0;
+    --muted-foreground: #6F5A42;
 
-    --accent: #441b3e;
-    --accent-foreground: #FBF3E8;
+    --accent: #EFE3C9;
+    --accent-foreground: #3B2A1B;
 
-    --destructive: #b91c1c;
+    --destructive: #A63D24;
 
-    --border: rgba(245, 215, 185, 0.18);
-    --input: rgba(245, 215, 185, 0.22);
-    --ring: #FBF3E8;
+    --border: rgba(94, 66, 38, 0.20);
+    --input: rgba(90, 62, 34, 0.25);
+    --ring: #9A6A28;
 
     --radius: 0.5rem;
 
-    --sidebar: #30132d;
-    --sidebar-foreground: #FFF8F0;
-    --sidebar-primary: #FBF3E8;
-    --sidebar-primary-foreground: #251023;
-    --sidebar-accent: #441b3e;
-    --sidebar-accent-foreground: #FBF3E8;
-    --sidebar-border: rgba(245, 215, 185, 0.18);
-    --sidebar-ring: #FBF3E8;
+    --sidebar: #FCF6E9;
+    --sidebar-foreground: #3B2A1B;
+    --sidebar-primary: #8A5A26;
+    --sidebar-primary-foreground: #FDF7EA;
+    --sidebar-accent: #EFE3C9;
+    --sidebar-accent-foreground: #3B2A1B;
+    --sidebar-border: rgba(94, 66, 38, 0.20);
+    --sidebar-ring: #9A6A28;
 }
 
 @layer base {
@@ -105,7 +105,7 @@
         @apply border-border outline-ring/40;
     }
     body {
-        @apply bg-background text-foreground font-sans antialiased selection:bg-amber-400/30 selection:text-amber-100;
+        @apply bg-background text-foreground font-sans antialiased selection:bg-amber-200/70 selection:text-amber-950;
     }
     html {
         @apply font-sans;

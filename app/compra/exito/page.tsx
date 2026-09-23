@@ -60,13 +60,13 @@ export default async function CompraExitosaPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-20">
-      <Card className="border border-border bg-[#2c1328] text-foreground shadow-2xl">
+      <Card className="border border-border bg-[#FCF6E9] text-foreground shadow-2xl">
         <CardContent className="flex flex-col items-center gap-6 py-12 text-center">
-          <div className="grid size-16 place-items-center rounded-full border border-amber-400/40 bg-amber-400/10 text-amber-300">
+          <div className="grid size-16 place-items-center rounded-full border border-amber-600/40 bg-amber-500/15 text-amber-800">
             {isApproved ? (
-              <CircleCheck className="size-8 text-amber-400" strokeWidth={1.5} />
+              <CircleCheck className="size-8 text-amber-700" strokeWidth={1.5} />
             ) : (
-              <CircleAlert className="size-8 text-amber-400" strokeWidth={1.5} />
+              <CircleAlert className="size-8 text-amber-700" strokeWidth={1.5} />
             )}
           </div>
           <div>
@@ -77,7 +77,7 @@ export default async function CompraExitosaPage({
                   : "¡Compra confirmada!"
                 : "Pago pendiente"}
             </h1>
-            <p className="mx-auto mt-3 max-w-md text-xs font-light uppercase tracking-[0.15em] text-muted-foreground leading-relaxed">
+            <p className="mx-auto mt-3 max-w-md text-xs font-normal uppercase tracking-[0.15em] text-muted-foreground leading-relaxed">
               {isApproved
                 ? needsReconciliation
                   ? "Confirmando el pago con Mercado Pago…"
@@ -98,34 +98,34 @@ export default async function CompraExitosaPage({
           {isApproved && purchase && purchase.status === "paid" && (
             <>
               {/* Detalle de la venta */}
-              <div className="w-full border border-border bg-[#34152f] px-6 py-5 text-left text-sm">
-                <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-amber-400/80">
+              <div className="w-full border border-border bg-[#F0E6D0] px-6 py-5 text-left text-sm">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-700">
                   Detalle de la venta
                 </p>
                 <div className="mt-3 space-y-2 text-xs">
-                  <p className="flex items-center justify-between gap-3 font-light text-foreground/80">
+                  <p className="flex items-center justify-between gap-3 font-normal text-foreground/80">
                     <span>
                       {purchase.quantity} × {purchase.tier.name}
                     </span>
-                    <span className="font-serif font-bold text-amber-300">
+                    <span className="font-serif font-bold text-foreground">
                       ${purchase.totalAmount.toLocaleString("es-AR")}
                     </span>
                   </p>
-                  <p className="flex items-center justify-between gap-3 font-light text-foreground/80">
+                  <p className="flex items-center justify-between gap-3 font-normal text-foreground/80">
                     <span>Precio por entrada</span>
                     <span className="font-medium text-foreground">
                       ${purchase.tier.price.toLocaleString("es-AR")}
                     </span>
                   </p>
                   <Separator className="bg-border" />
-                  <p className="flex items-center gap-2 font-light text-muted-foreground">
-                    <MailCheck className="size-3.5 text-amber-400" strokeWidth={1.5} /> Enviadas a{" "}
+                  <p className="flex items-center gap-2 font-normal text-muted-foreground">
+                    <MailCheck className="size-3.5 text-amber-700" strokeWidth={1.5} /> Enviadas a{" "}
                     <span className="font-medium text-foreground">
                       {purchase.buyerEmail}
                     </span>
                   </p>
                   {purchase.referringVolunteer && (
-                    <p className="font-light text-muted-foreground">
+                    <p className="font-normal text-muted-foreground">
                       Viene de parte de{" "}
                       <span className="font-medium text-foreground">
                         {purchase.referringVolunteer}
@@ -136,10 +136,10 @@ export default async function CompraExitosaPage({
 
                 {!isDonation && purchase.tickets.length > 0 && (
                   <div className="mt-5 border-t border-border pt-4">
-                    <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-amber-400/80">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-700">
                       Asistentes
                     </p>
-                    <div className="mt-2 space-y-1.5 text-xs font-light text-foreground/80">
+                    <div className="mt-2 space-y-1.5 text-xs font-normal text-foreground/80">
                       {purchase.tickets.map((t) => (
                         <p key={t.id}>
                           <span className="font-medium text-foreground">
@@ -156,27 +156,27 @@ export default async function CompraExitosaPage({
               {/* Info columns */}
               <div className="w-full space-y-3 text-left">
                 {!isDonation && (
-                  <div className="flex items-start gap-3 border border-border bg-[#240c20]/60 p-4">
-                    <QrCode className="mt-0.5 size-4 shrink-0 text-amber-400" strokeWidth={1.5} />
-                    <p className="text-xs font-light leading-relaxed text-foreground/80">
-                      <strong className="font-semibold text-amber-200 uppercase tracking-wider">Presentá tu QR en la entrada.</strong> Cada
+                  <div className="flex items-start gap-3 border border-border bg-[#F0E6D0] p-4">
+                    <QrCode className="mt-0.5 size-4 shrink-0 text-amber-700" strokeWidth={1.5} />
+                    <p className="text-xs font-normal leading-relaxed text-foreground/80">
+                      <strong className="font-semibold text-amber-800 uppercase tracking-wider">Presentá tu QR en la entrada.</strong> Cada
                       entrada tiene su propio código y corresponde a un
                       asistente.
                     </p>
                   </div>
                 )}
-                <div className="flex items-start gap-3 border border-border bg-[#240c20]/60 p-4">
-                  <ShieldCheck className="mt-0.5 size-4 shrink-0 text-amber-400" strokeWidth={1.5} />
-                  <p className="text-xs font-light leading-relaxed text-foreground/80">
-                    <strong className="font-semibold text-amber-200 uppercase tracking-wider">Pago seguro.</strong> Procesado por Mercado Pago. No
+                <div className="flex items-start gap-3 border border-border bg-[#F0E6D0] p-4">
+                  <ShieldCheck className="mt-0.5 size-4 shrink-0 text-amber-700" strokeWidth={1.5} />
+                  <p className="text-xs font-normal leading-relaxed text-foreground/80">
+                    <strong className="font-semibold text-amber-800 uppercase tracking-wider">Pago seguro.</strong> Procesado por Mercado Pago. No
                     está permitida la venta a menores de edad.
                   </p>
                 </div>
                 {!isDonation && (
-                  <div className="flex items-start gap-3 border border-border bg-[#240c20]/60 p-4">
-                    <Wine className="mt-0.5 size-4 shrink-0 text-amber-400" strokeWidth={1.5} />
-                    <p className="text-xs font-light leading-relaxed text-foreground/80">
-                      <strong className="font-semibold text-amber-200 uppercase tracking-wider">
+                  <div className="flex items-start gap-3 border border-border bg-[#F0E6D0] p-4">
+                    <Wine className="mt-0.5 size-4 shrink-0 text-amber-700" strokeWidth={1.5} />
+                    <p className="text-xs font-normal leading-relaxed text-foreground/80">
+                      <strong className="font-semibold text-amber-800 uppercase tracking-wider">
                         {DEFAULT_ALCOHOL_ALLOWANCE} consumos por entrada.
                       </strong>{" "}
                       Los menores de edad no acceden a bebidas alcohólicas.
@@ -186,12 +186,12 @@ export default async function CompraExitosaPage({
               </div>
 
               {/* Datos del evento */}
-              <div className="w-full space-y-2 border border-border bg-[#381734] p-5 text-left text-xs">
+              <div className="w-full space-y-2 border border-border bg-[#F0E6D0] p-5 text-left text-xs">
                 <p className="flex items-center gap-2 font-serif text-sm font-bold uppercase tracking-wider text-foreground">
-                  <TicketIcon className="size-4 text-amber-400" strokeWidth={1.5} /> {purchase.tier.event.name}
+                  <TicketIcon className="size-4 text-amber-700" strokeWidth={1.5} /> {purchase.tier.event.name}
                 </p>
-                <p className="flex items-center gap-2 font-light text-muted-foreground">
-                  <CalendarDays className="size-3.5 text-amber-400" strokeWidth={1.5} />
+                <p className="flex items-center gap-2 font-normal text-muted-foreground">
+                  <CalendarDays className="size-3.5 text-amber-700" strokeWidth={1.5} />
                   {new Date(purchase.tier.event.date).toLocaleString("es-AR", {
                     weekday: "long",
                     day: "numeric",
@@ -201,19 +201,19 @@ export default async function CompraExitosaPage({
                     minute: "2-digit",
                   })}
                 </p>
-                <p className="flex items-center gap-2 font-light text-muted-foreground">
-                  <Clock3 className="size-3.5 text-amber-400" strokeWidth={1.5} /> {DOORS_TEXT}
+                <p className="flex items-center gap-2 font-normal text-muted-foreground">
+                  <Clock3 className="size-3.5 text-amber-700" strokeWidth={1.5} /> {DOORS_TEXT}
                 </p>
                 <a
                   href={VENUE_MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 font-light text-muted-foreground transition-colors hover:text-amber-300 hover:underline"
+                  className="flex items-center gap-2 font-normal text-muted-foreground transition-colors hover:text-amber-700 hover:underline"
                 >
-                  <MapPin className="size-3.5 text-amber-400" strokeWidth={1.5} /> {purchase.tier.event.venue}
+                  <MapPin className="size-3.5 text-amber-700" strokeWidth={1.5} /> {purchase.tier.event.venue}
                 </a>
                 {isDonation && (
-                  <Badge variant="outline" className="mt-1 border-amber-400/30 bg-amber-400/10 text-[10px] font-medium uppercase tracking-widest text-amber-200">
+                  <Badge variant="outline" className="mt-1 border-amber-600/40 bg-amber-500/15 text-[10px] font-semibold uppercase tracking-widest text-amber-800">
                     Entradas donadas · quedan a cargo de la organización
                   </Badge>
                 )}
@@ -223,7 +223,7 @@ export default async function CompraExitosaPage({
 
           <Link
             href="/"
-            className="mt-4 text-xs font-light uppercase tracking-[0.25em] text-muted-foreground transition-colors hover:text-amber-300 hover:underline underline-offset-8"
+            className="mt-4 text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground transition-colors hover:text-amber-700 hover:underline underline-offset-8"
           >
             Volver a la página principal
           </Link>
