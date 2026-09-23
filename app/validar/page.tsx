@@ -18,7 +18,7 @@ export default async function ValidarPage() {
           Esta sección es para el equipo de la peña. Ingresá la contraseña para
           validar entradas y controlar el consumo de bebidas.
         </p>
-        <div className="mt-8 w-full max-w-sm border border-border bg-[#1f0a1c] p-6 text-left shadow-xl">
+        <div className="mt-8 w-full max-w-sm border border-border bg-[#4A2C45] p-6 text-left shadow-2xl">
           <LoginForm />
         </div>
       </div>
