@@ -41,14 +41,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               href="/"
               className="flex items-center gap-3 transition-opacity hover:opacity-85"
             >
-              <span className="grid size-8 place-items-center rounded-sm border border-amber-400/30 bg-amber-500/10 text-amber-400">
+              <span className="grid size-8 -translate-y-[5px] place-items-center rounded-sm border border-amber-400/30 bg-amber-500/10 text-amber-400">
                 <TicketIcon className="size-4 text-amber-400" strokeWidth={1.5} />
               </span>
               <span className="font-serif text-sm font-bold uppercase tracking-[0.2em] text-foreground">
                 Peña Austral
               </span>
             </Link>
-            <nav className="flex items-center gap-6 text-xs uppercase font-medium tracking-[0.25em]">
+            <nav className="flex items-center gap-3 text-xs uppercase font-medium tracking-[0.15em] sm:gap-6 sm:tracking-[0.25em]">
               <Link
                 href="/#entradas"
                 className="text-foreground/75 transition-colors hover:text-amber-400"

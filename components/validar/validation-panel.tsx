@@ -125,7 +125,7 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
             <Button
               type="submit"
               disabled={!manualCode.trim()}
-              className="bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#1e0a1c] font-bold text-xs uppercase tracking-[0.15em] border border-[#ECC472]/60 cursor-pointer"
+              className="bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#1e0a1c] font-bold text-xs uppercase tracking-[0.15em] border border-[#ECC472]/60 transition-all cursor-pointer"
             >
               <Search className="mr-2 h-3.5 w-3.5 text-[#1e0a1c]" strokeWidth={1.5} /> Buscar
             </Button>
@@ -156,7 +156,7 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
             <Button
               type="submit"
               disabled={searching}
-              className="bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#1e0a1c] font-bold text-xs uppercase tracking-[0.15em] border border-[#ECC472]/60 cursor-pointer"
+              className="bg-gradient-to-r from-[#C69234] via-[#DEB052] to-[#C69234] hover:from-[#D49E3B] hover:via-[#E8BC60] hover:to-[#D49E3B] text-[#1e0a1c] font-bold text-xs uppercase tracking-[0.15em] border border-[#ECC472]/60 transition-all cursor-pointer"
             >
               {searching ? (
                 <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin text-[#1e0a1c]" />
