@@ -1,15 +1,14 @@
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { PurchaseForm } from "@/components/purchase/purchase-form";
+import { VenueDialog } from "@/components/hero/venue-dialog";
 import {
   DEFAULT_ALCOHOL_ALLOWANCE,
   DOORS_TEXT,
   PREVENTA_LABEL,
-  VENUE_MAPS_URL,
 } from "@/lib/config";
 import {
   CalendarDays,
-  MapPin,
   Clock3,
   Music,
   ShieldCheck,
@@ -24,7 +23,10 @@ const formatPrice = (value: number) =>
 
 function MinimalDivider() {
   return (
-    <div aria-hidden className="mx-auto flex max-w-3xl items-center justify-center gap-4 px-6 py-6">
+    <div
+      aria-hidden
+      className="mx-auto flex max-w-3xl items-center justify-center gap-4 px-6 py-6"
+    >
       <div className="h-px flex-1 bg-gradient-to-r from-transparent via-amber-500/30 to-transparent" />
       <div className="flex items-center gap-2 text-amber-600/80">
         <span className="size-1 rotate-45 border border-amber-500/60" />
@@ -49,7 +51,7 @@ export default async function Home() {
         <h1 className="font-serif text-2xl font-bold uppercase tracking-widest text-foreground">
           Evento no publicado todavía
         </h1>
-        <p className="mt-3 text-xs font-light uppercase tracking-[0.25em] text-muted-foreground">
+        <p className="mt-3 text-sm font-light uppercase tracking-[0.25em] text-muted-foreground">
           Volvé pronto, estamos preparando la próxima peña.
         </p>
       </div>
@@ -107,35 +109,38 @@ export default async function Home() {
           </p>
 
           {/* Centered details dock - Row 1: Date, Doors, Venue. Row 2: Price & Preventa centered */}
-          <div className="mx-auto mt-10 w-full max-w-4xl overflow-hidden rounded-sm border border-border bg-[#FCF6E9]/95 shadow-2xl backdrop-blur">
+          <div className="mx-auto mt-10 w-full max-w-4xl overflow-hidden rounded-sm">
             {/* Fila 1: Día, Horarios y Ubicación en una sola fila */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border border-b border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border border-b border-border  bg-[#FCF6E9]/95 shadow-2xl backdrop-blur ">
               <div className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-medium uppercase tracking-[0.15em] text-foreground text-center">
-                <CalendarDays className="size-4 text-amber-700 shrink-0" strokeWidth={1.5} />
+                <CalendarDays
+                  className="size-4 text-amber-700 shrink-0"
+                  strokeWidth={1.5}
+                />
                 <span>{dateLabel}</span>
               </div>
               <div className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-medium uppercase tracking-[0.15em] text-foreground text-center">
-                <Clock3 className="size-4 text-amber-700 shrink-0" strokeWidth={1.5} />
+                <Clock3
+                  className="size-4 text-amber-700 shrink-0"
+                  strokeWidth={1.5}
+                />
                 <span>{DOORS_TEXT}</span>
               </div>
-              <a
-                href={VENUE_MAPS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-medium uppercase tracking-[0.15em] text-foreground transition-colors hover:text-amber-700 hover:bg-amber-500/10 text-center"
-              >
-                <MapPin className="size-4 text-amber-700 shrink-0" strokeWidth={1.5} />
-                <span className="truncate">{event.venue}</span>
-              </a>
+              <VenueDialog venue={event.venue} />
             </div>
 
             {/* Fila 2: Precio con texto de preventa abajo centrado */}
-            <div className="flex flex-wrap items-center justify-center gap-3 bg-[#F0E6D0] px-6 py-4 text-center">
-              <span className="inline-flex items-center gap-1.5 rounded-sm border border-amber-600/40 bg-amber-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-800">
-                <TicketIcon className="size-3.5 text-amber-700 shrink-0" strokeWidth={1.5} />
+            <div className="flex items-center  justify-center gap-3 px-6 py-4">
+              <div className="inline-flex items-center gap-1.5 rounded-sm bg-[#8A5A26] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#FDF7EA] leading-none">
+                <TicketIcon
+                  className="text-[#EFE3C9] shrink-0"
+                  strokeWidth={1.5}
+                  height={24}
+                  width={24}
+                />
                 <span>{PREVENTA_LABEL}</span>
-              </span>
-              <span className="font-serif text-2xl font-bold tracking-tight text-amber-800 sm:text-3xl">
+              </div>
+              <span className="font-serif text-2xl font-bold tracking-tight sm:text-3xl leading-none text-[#EFE3C9]">
                 {formatPrice(unitPrice)}
               </span>
             </div>
@@ -168,6 +173,7 @@ export default async function Home() {
               id: t.id,
               name: t.name,
               price: t.price,
+              ticketCount: t.ticketCount ?? 1,
               remaining: remaining(t),
             }))}
           />
@@ -180,24 +186,30 @@ export default async function Home() {
           <div className="grid divide-y divide-border border border-border bg-[#FCF6E9] sm:grid-cols-3 sm:divide-y-0 sm:divide-x shadow-md">
             <div className="flex flex-col items-center p-8 text-center sm:p-10">
               <div className="grid size-12 place-items-center rounded-sm border border-amber-600/30 bg-amber-100/80 text-amber-700">
-                <ShieldCheck className="size-6 text-amber-700" strokeWidth={1.5} />
+                <ShieldCheck
+                  className="size-6 text-amber-700"
+                  strokeWidth={1.5}
+                />
               </div>
               <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-foreground">
                 Pago seguro
               </h3>
-              <p className="mt-3 text-xs font-normal leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-sm font-normal leading-relaxed text-muted-foreground">
                 Procesado por Mercado Pago, con todos los medios de pago de
                 Argentina. No está permitida la venta a menores de edad.
               </p>
             </div>
             <div className="flex flex-col items-center p-8 text-center sm:p-10">
               <div className="grid size-12 place-items-center rounded-sm border border-amber-600/30 bg-amber-100/80 text-amber-700">
-                <TicketIcon className="size-6 text-amber-700" strokeWidth={1.5} />
+                <TicketIcon
+                  className="size-6 text-amber-700"
+                  strokeWidth={1.5}
+                />
               </div>
               <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-foreground">
                 QR al instante
               </h3>
-              <p className="mt-3 text-xs font-normal leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-sm font-normal leading-relaxed text-muted-foreground">
                 Recibís tu código QR por email apenas confirmamos el pago.
                 Presentá tu QR en la entrada.
               </p>
@@ -209,7 +221,7 @@ export default async function Home() {
               <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-foreground">
                 {DEFAULT_ALCOHOL_ALLOWANCE} consumos
               </h3>
-              <p className="mt-3 text-xs font-normal leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-sm font-normal leading-relaxed text-muted-foreground">
                 Cada entrada incluye {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
                 alcohólicas. Los menores de edad no acceden a bebidas
                 alcohólicas.

@@ -22,6 +22,8 @@ export async function fulfillPurchase(purchaseId: string) {
     return { fulfilled: true, tickets: [] };
   }
 
+  const ticketsToGenerate = purchase.quantity * (purchase.tier.ticketCount ?? 1);
+
   type GuestRecord = {
     name: string;
     dni: string;
@@ -35,12 +37,12 @@ export async function fulfillPurchase(purchaseId: string) {
     : [];
 
   const payloads = [];
-  for (let i = 0; i < purchase.quantity; i++) {
+  for (let i = 0; i < ticketsToGenerate; i++) {
     const guest = guests[i];
     const guestName =
       guest?.name ??
-      (purchase.quantity > 1
-        ? `${purchase.buyerName} (${i + 1}/${purchase.quantity})`
+      (ticketsToGenerate > 1
+        ? `${purchase.buyerName} (${i + 1}/${ticketsToGenerate})`
         : purchase.buyerName);
     const guestDni = guest?.dni ?? purchase.buyerDni ?? "";
 
@@ -74,7 +76,7 @@ export async function fulfillPurchase(purchaseId: string) {
     ...payloads.map((p) => prisma.ticket.create({ data: p })),
     prisma.ticketTier.update({
       where: { id: purchase.tierId },
-      data: { soldCount: { increment: purchase.quantity } },
+      data: { soldCount: { increment: ticketsToGenerate } },
     }),
   ])) as Ticket[];
 

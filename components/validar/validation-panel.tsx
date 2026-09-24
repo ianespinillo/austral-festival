@@ -72,7 +72,7 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
           <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-foreground">
             Panel de validación
           </h1>
-          <p className="mt-1 text-xs font-light uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="mt-1 text-sm font-light uppercase tracking-[0.2em] text-muted-foreground">
             {eventName}
           </p>
         </div>
@@ -167,7 +167,7 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
             </Button>
           </form>
           {searching && (
-            <div className="mt-4 flex items-center gap-2 text-xs font-light uppercase tracking-[0.15em] text-muted-foreground">
+            <div className="mt-4 flex items-center gap-2 text-sm font-light uppercase tracking-[0.15em] text-muted-foreground">
               <Loader2 className="h-3.5 w-3.5 animate-spin text-amber-700" /> Consultando…
             </div>
           )}
@@ -176,7 +176,7 @@ export function ValidationPanel({ eventName }: { eventName: string }) {
 
       {tickets.length > 0 && (
         <div className="mt-8 space-y-4">
-          <p className="text-xs font-light uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="text-sm font-light uppercase tracking-[0.2em] text-muted-foreground">
             {tickets.length === 1
               ? "1 entrada encontrada"
               : `${tickets.length} entradas encontradas`}

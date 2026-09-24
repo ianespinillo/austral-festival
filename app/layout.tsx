@@ -66,7 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </header>
         <main className="flex-1">{children}</main>
         <footer className="border-t border-border bg-[#F1E7D2]">
-          <div className="mx-auto max-w-5xl px-6 py-10 text-center text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+          <div className="mx-auto max-w-5xl px-6 py-10 text-center text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
             Peña Folklórica · Universidad Austral · Campus Pilar · 2026
           </div>
         </footer>

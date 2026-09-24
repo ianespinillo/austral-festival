@@ -14,7 +14,7 @@ export default async function ValidarPage() {
         <h1 className="font-serif text-3xl font-bold uppercase tracking-wider text-foreground">
           Validación de entradas
         </h1>
-        <p className="mt-3 max-w-sm text-xs font-light uppercase tracking-[0.15em] text-muted-foreground leading-relaxed">
+        <p className="mt-3 max-w-sm text-sm font-light uppercase tracking-[0.15em] text-muted-foreground leading-relaxed">
           Esta sección es para el equipo de la peña. Ingresá la contraseña para
           validar entradas y controlar el consumo de bebidas.
         </p>

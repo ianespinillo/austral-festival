@@ -152,12 +152,12 @@ export function TicketCard({
             </h3>
           </div>
           {checkedIn ? (
-            <Badge variant="outline" className="border-amber-600/40 bg-amber-500/15 text-amber-800 font-medium text-[10px] uppercase tracking-[0.2em]">
+            <Badge variant="outline" className="border-amber-600/40 bg-amber-500/15 text-amber-800 font-medium text-xs uppercase tracking-[0.2em]">
               <CheckCircle2 className="mr-1.5 size-3 text-amber-700" strokeWidth={1.5} /> Ingresó{" "}
               {ticket.checkedInAt ? formatDate(ticket.checkedInAt) : ""}
             </Badge>
           ) : (
-            <Badge variant="outline" className="border-border text-muted-foreground font-light text-[10px] uppercase tracking-[0.2em]">
+            <Badge variant="outline" className="border-border text-muted-foreground font-light text-xs uppercase tracking-[0.2em]">
               Por ingresar
             </Badge>
           )}
@@ -175,7 +175,7 @@ export function TicketCard({
                 <span className="font-mono font-medium text-foreground">{ticket.holderDni}</span>
               </p>
               {ticket.holderBirthDate && (
-                <p className="flex items-center gap-1.5 text-[11px] font-light text-muted-foreground">
+                <p className="flex items-center gap-1.5 text-xs font-light text-muted-foreground">
                   <CalendarClock className="size-3.5 text-amber-700" strokeWidth={1.5} />
                   Nacimiento:{" "}
                   {new Date(ticket.holderBirthDate).toLocaleDateString("es-AR")}
@@ -183,7 +183,7 @@ export function TicketCard({
                 </p>
               )}
               {ticket.diet !== "regular" && (
-                <p className="flex items-center gap-1.5 text-[11px] font-light text-foreground">
+                <p className="flex items-center gap-1.5 text-xs font-light text-foreground">
                   <UtensilsCrossed className="size-3.5 text-amber-700" strokeWidth={1.5} />
                   Menú: {dietLabel(ticket.diet)}
                 </p>
@@ -193,7 +193,7 @@ export function TicketCard({
               {minor ? (
                 <Badge
                   variant="outline"
-                  className="border-red-500/40 bg-red-100/80 text-red-700 text-[10px] font-light uppercase tracking-[0.15em]"
+                  className="border-red-500/40 bg-red-100/80 text-red-700 text-xs font-light uppercase tracking-[0.15em]"
                 >
                   <ShieldAlert className="mr-1 size-3" />
                   Menor de edad
@@ -201,20 +201,20 @@ export function TicketCard({
               ) : (
                 <Badge
                   variant="outline"
-                  className="border-amber-600/40 bg-amber-500/15 text-amber-800 text-[10px] font-medium uppercase tracking-[0.15em]"
+                  className="border-amber-600/40 bg-amber-500/15 text-amber-800 text-xs font-medium uppercase tracking-[0.15em]"
                 >
                   <ShieldCheck className="mr-1 size-3 text-amber-700" strokeWidth={1.5} />
                   Mayor de edad
                 </Badge>
               )}
-              <p className="text-[10px] font-light text-muted-foreground uppercase tracking-[0.1em]">
+              <p className="text-xs font-light text-muted-foreground uppercase tracking-[0.1em]">
                 {ticket.alcoholAllowance > 0
                   ? `${ticket.alcoholAllowance} consumos incluidos`
                   : "Sin bebidas alcohólicas"}
               </p>
             </div>
           </div>
-          <p className="mt-3 border-t border-border pt-2 font-mono text-[11px] text-muted-foreground/60">
+          <p className="mt-3 border-t border-border pt-2 font-mono text-xs text-muted-foreground/60">
             {ticket.qrCode}
           </p>
         </div>
@@ -248,7 +248,7 @@ export function TicketCard({
                 value={(ticket.alcoholicServed / ticket.maxAlcoholic) * 100}
                 className="h-1.5 bg-amber-900/15 [&>div]:bg-amber-600"
               />
-              <p className="text-[11px] font-light text-muted-foreground">
+              <p className="text-xs font-light text-muted-foreground">
                 {limitReached
                   ? `Límite alcanzado (${ticket.maxAlcoholic} consumos).`
                   : `Quedan ${ticket.alcoholicRemaining} consumos.`}

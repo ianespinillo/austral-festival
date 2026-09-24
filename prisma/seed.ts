@@ -13,7 +13,7 @@ async function main() {
       data: {
         name: "Peña Austral 2026",
         description:
-          "Una noche de folklore, baile y tradición argentina organizada por la Universidad Austral. Te esperamos en Mariano Acosta 1610 para cantar, bailar y compartir.",
+          "Una noche de folklore, baile y tradición argentina organizada por la Universidad Austral. Te esperamos para cantar, bailar y compartir.",
         date: new Date("2026-11-20T23:00:00.000Z"),
         venue: VENUE_ADDRESS,
       },
@@ -33,6 +33,7 @@ async function main() {
         eventId: event.id,
         name: "Preventa 1",
         price: 12000,
+        ticketCount: 1,
         maxStock: 300,
         isActive: true,
       },
@@ -40,6 +41,27 @@ async function main() {
     console.log(`✅ TicketTier creado: ${tier.name} ($${tier.price}, stock: ${tier.maxStock})`);
   } else {
     console.log(`ℹ️ TicketTier ya existente: ${tier.name} ($${tier.price}, stock: ${tier.maxStock})`);
+  }
+
+  // Family pack: 6 tickets for the price of 5
+  const packExists = await prisma.ticketTier.findFirst({
+    where: { eventId: event.id, name: "Pack Familiar" },
+  });
+  if (!packExists) {
+    const packPrice = tier.price * 5;
+    const pack = await prisma.ticketTier.create({
+      data: {
+        eventId: event.id,
+        name: "Pack Familiar",
+        price: packPrice,
+        ticketCount: 6,
+        maxStock: 50,
+        isActive: true,
+      },
+    });
+    console.log(`✅ TicketTier creado: ${pack.name} ($${pack.price}, stock: ${pack.maxStock})`);
+  } else {
+    console.log(`ℹ️ Pack Familiar ya existente ($${packExists.price})`);
   }
 
   console.log("🏁 Seed completado con éxito.");

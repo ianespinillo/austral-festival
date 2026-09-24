@@ -77,7 +77,7 @@ export default async function CompraExitosaPage({
                   : "¡Compra confirmada!"
                 : "Pago pendiente"}
             </h1>
-            <p className="mx-auto mt-3 max-w-md text-xs font-normal uppercase tracking-[0.15em] text-muted-foreground leading-relaxed">
+            <p className="mx-auto mt-3 max-w-md text-sm font-normal uppercase tracking-[0.15em] text-muted-foreground leading-relaxed">
               {isApproved
                 ? needsReconciliation
                   ? "Confirmando el pago con Mercado Pago…"
