@@ -110,4 +110,10 @@
     html {
         @apply font-sans;
     }
+    /* Anchor navigation: smooth scroll, respecting reduced-motion */
+    @media (prefers-reduced-motion: no-preference) {
+        html {
+            scroll-behavior: smooth;
+        }
+    }
 }

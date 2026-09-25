@@ -19,7 +19,12 @@ import {
 export const dynamic = "force-dynamic";
 
 const formatPrice = (value: number) =>
-  value.toLocaleString("es-AR", { style: "currency", currency: "ARS" });
+  value.toLocaleString("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    currencyDisplay: "narrowSymbol",
+    maximumFractionDigits: 0,
+  });
 
 function MinimalDivider() {
   return (
@@ -90,7 +95,7 @@ export default async function Home() {
 
         <div className="relative mx-auto max-w-5xl px-6 py-24 sm:py-32 text-center">
           {/* Tag / Pre-heading */}
-          <div className="inline-flex items-center gap-2.5 border border-amber-400/30 bg-[#4A3726]/90 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-300 shadow-sm backdrop-blur">
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-amber-400/30 bg-[#4A3726]/90 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-300 shadow-sm backdrop-blur">
             <Music className="size-3 text-amber-400" strokeWidth={1.5} />
             <span>Peña Folklórica · Universidad Austral</span>
           </div>
@@ -109,19 +114,19 @@ export default async function Home() {
           </p>
 
           {/* Centered details dock - Row 1: Date, Doors, Venue. Row 2: Price & Preventa centered */}
-          <div className="mx-auto mt-10 w-full max-w-4xl overflow-hidden rounded-sm">
+          <div className="mx-auto mt-10 w-full max-w-4xl">
             {/* Fila 1: Día, Horarios y Ubicación en una sola fila */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border border-b border-border  bg-[#FCF6E9]/95 shadow-2xl backdrop-blur ">
-              <div className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-medium uppercase tracking-[0.15em] text-foreground text-center">
+            <div className="grid grid-cols-1 divide-y divide-amber-400/20 border-y border-amber-400/20 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+              <div className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-medium uppercase tracking-[0.15em] text-[#FBF3E3]/90 text-center">
                 <CalendarDays
-                  className="size-4 text-amber-700 shrink-0"
+                  className="size-4 text-amber-300 shrink-0"
                   strokeWidth={1.5}
                 />
                 <span>{dateLabel}</span>
               </div>
-              <div className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-medium uppercase tracking-[0.15em] text-foreground text-center">
+              <div className="flex items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-medium uppercase tracking-[0.15em] text-[#FBF3E3]/90 text-center">
                 <Clock3
-                  className="size-4 text-amber-700 shrink-0"
+                  className="size-4 text-amber-300 shrink-0"
                   strokeWidth={1.5}
                 />
                 <span>{DOORS_TEXT}</span>
@@ -130,17 +135,17 @@ export default async function Home() {
             </div>
 
             {/* Fila 2: Precio con texto de preventa abajo centrado */}
-            <div className="flex items-center  justify-center gap-3 px-6 py-4">
-              <div className="inline-flex items-center gap-1.5 rounded-sm bg-[#8A5A26] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#FDF7EA] leading-none">
+            <div className="flex items-center justify-center gap-3 px-6 pt-3">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-amber-300 leading-none">
                 <TicketIcon
-                  className="text-[#EFE3C9] shrink-0"
+                  className="text-amber-300 shrink-0"
                   strokeWidth={1.5}
                   height={24}
                   width={24}
                 />
                 <span>{PREVENTA_LABEL}</span>
               </div>
-              <span className="font-serif text-2xl font-bold tracking-tight sm:text-3xl leading-none text-[#EFE3C9]">
+              <span className="font-sans text-2xl font-bold tracking-tight sm:text-3xl leading-none text-[#FBF3E3]">
                 {formatPrice(unitPrice)}
               </span>
             </div>
@@ -183,9 +188,9 @@ export default async function Home() {
       {/* Trust & Details: 3-column clean line-divided block */}
       <section className="border-t border-b border-border bg-[#F1E7D2]">
         <div className="mx-auto max-w-5xl px-6 py-20">
-          <div className="grid divide-y divide-border border border-border bg-[#FCF6E9] sm:grid-cols-3 sm:divide-y-0 sm:divide-x shadow-md">
+          <div className="grid divide-y divide-border overflow-hidden rounded-2xl border border-border bg-[#FCF6E9] shadow-md sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
             <div className="flex flex-col items-center p-8 text-center sm:p-10">
-              <div className="grid size-12 place-items-center rounded-sm border border-amber-600/30 bg-amber-100/80 text-amber-700">
+              <div className="grid size-12 place-items-center rounded-2xl border border-amber-600/30 bg-amber-100/80 text-amber-700">
                 <ShieldCheck
                   className="size-6 text-amber-700"
                   strokeWidth={1.5}
@@ -200,7 +205,7 @@ export default async function Home() {
               </p>
             </div>
             <div className="flex flex-col items-center p-8 text-center sm:p-10">
-              <div className="grid size-12 place-items-center rounded-sm border border-amber-600/30 bg-amber-100/80 text-amber-700">
+              <div className="grid size-12 place-items-center rounded-2xl border border-amber-600/30 bg-amber-100/80 text-amber-700">
                 <TicketIcon
                   className="size-6 text-amber-700"
                   strokeWidth={1.5}
@@ -215,7 +220,7 @@ export default async function Home() {
               </p>
             </div>
             <div className="flex flex-col items-center p-8 text-center sm:p-10">
-              <div className="grid size-12 place-items-center rounded-sm border border-amber-600/30 bg-amber-100/80 text-amber-700">
+              <div className="grid size-12 place-items-center rounded-2xl border border-amber-600/30 bg-amber-100/80 text-amber-700">
                 <Wine className="size-6 text-amber-700" strokeWidth={1.5} />
               </div>
               <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-foreground">

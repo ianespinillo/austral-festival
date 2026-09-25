@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     "Venta de entradas para la peña folklórica de la Universidad Austral, en el Campus Pilar.",
 };
 
+const navLinkClass =
+  "relative text-foreground/75 transition-colors hover:text-amber-700 after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-amber-700 after:transition-transform after:duration-300 hover:after:scale-x-100";
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -49,16 +52,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </span>
             </Link>
             <nav className="flex items-center gap-3 text-xs uppercase font-medium tracking-[0.15em] sm:gap-6 sm:tracking-[0.25em]">
-              <Link
-                href="/#entradas"
-                className="text-foreground/75 transition-colors hover:text-amber-700"
-              >
+              <Link href="/#entradas" className={navLinkClass}>
                 Entradas
               </Link>
-              <Link
-                href="/validar"
-                className="text-foreground/75 transition-colors hover:text-amber-700"
-              >
+              <Link href="/validar" className={navLinkClass}>
                 Validar
               </Link>
             </nav>

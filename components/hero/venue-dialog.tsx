@@ -21,7 +21,7 @@ export function VenueDialog({ venue }: { venue: string }) {
   return (
     <Dialog>
       <DialogTrigger
-        className="flex cursor-pointer items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-medium uppercase tracking-[0.15em] text-foreground transition-colors hover:bg-amber-500/10 hover:text-amber-700 text-center"
+        className="flex cursor-pointer items-center justify-center gap-2.5 px-4 py-3.5 text-xs font-medium uppercase tracking-[0.15em] text-[#FBF3E3]/90 transition-colors hover:bg-amber-400/10 hover:text-amber-300 text-center"
       >
         <MapPin className="size-4 text-amber-700 shrink-0" strokeWidth={1.5} />
         <span className="truncate">{venue}</span>
@@ -36,7 +36,7 @@ export function VenueDialog({ venue }: { venue: string }) {
             {VENUE_ADDRESS}
           </DialogDescription>
         </DialogHeader>
-        <div aria-hidden className="grid place-items-center border border-border bg-[#EFE3C9]">
+        <div aria-hidden className="grid place-items-center overflow-hidden rounded-xl border border-border bg-[#EFE3C9]">
           <iframe
             src={VENUE_MAPS_EMBED_URL}
             title="Mapa de ubicación de la peña"
@@ -52,7 +52,7 @@ export function VenueDialog({ venue }: { venue: string }) {
           rel="noopener noreferrer"
           className={cn(
             buttonVariants({ variant: "outline" }),
-            "cursor-pointer gap-2 border-amber-600/40 bg-amber-500/15 text-amber-800 hover:bg-amber-500/25"
+            "cursor-pointer gap-2 rounded-lg border-amber-600/40 bg-amber-500/15 text-amber-800 hover:bg-amber-500/25"
           )}
         >
           <ExternalLink className="size-4" strokeWidth={1.5} />
