@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const montserrat = Montserrat({
-  weight: ["200", "300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -27,15 +27,15 @@ export const metadata: Metadata = {
   description:
     "Venta de entradas para la peña folklórica de la Universidad Austral, en el Campus Pilar.",
 };
-
 const navLinkClass =
   "relative text-foreground/75 transition-colors hover:text-amber-700 after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-amber-700 after:transition-transform after:duration-300 hover:after:scale-x-100";
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+
   return (
     <html
       lang="es"
-      className={`${montserrat.variable} ${playfair.variable} ${geistMono.variable} dark h-full antialiased`}
+      className={`${montserrat.variable} ${playfair.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-amber-200/70 selection:text-amber-950">
         <header className="sticky top-0 z-40 border-b border-border bg-[#F8F1E3]/90 backdrop-blur-md">
@@ -67,7 +67,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             Peña Folklórica · Universidad Austral · Campus Pilar · 2026
           </div>
         </footer>
-        <Toaster position="top-center" richColors theme="dark" />
+        <Toaster position="top-center" richColors theme="light" />
       </body>
     </html>
   );

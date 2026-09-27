@@ -11,6 +11,7 @@ async function main() {
   if (!event) {
     event = await prisma.event.create({
       data: {
+
         name: "Peña Austral 2026",
         description:
           "Una noche de folklore, baile y tradición argentina organizada por la Universidad Austral. Te esperamos para cantar, bailar y compartir.",
@@ -63,7 +64,6 @@ async function main() {
   } else {
     console.log(`ℹ️ Pack Familiar ya existente ($${packExists.price})`);
   }
-
   console.log("🏁 Seed completado con éxito.");
 }
 

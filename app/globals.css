@@ -16,6 +16,10 @@
     --color-cacao-deep: var(--cacao-deep);
     --color-cacao-card: var(--cacao-card);
     --color-cacao-border: var(--cacao-border);
+    --color-pampa: var(--pampa);
+    --color-oro: var(--oro);
+    --color-cielo: var(--cielo);
+    --color-vino: var(--vino);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,9 +52,7 @@
 }
 
 :root, .dark {
-    --font-sans: 'Montserrat', sans-serif;
-    --font-serif: 'Playfair Display', serif;
-    --font-display: 'Playfair Display', serif;
+    --font-display: var(--font-serif);
 
     /* Peña familiar: crema cálido, miel y marrones de la tierra */
     --background: #F6EEDD;
@@ -62,6 +64,12 @@
     --cacao-card: #4A3726;
     --cacao-border: rgba(43, 29, 17, 0.25);
 
+    /* Acentos operativos con ALTO CONTRASTE y legibilidad sobre crema (#F6EEDD / #FCF6E9) */
+    --pampa: #2D7252;
+    --oro: #8F5B00;
+    --cielo: #1A5B83;
+    --vino: #9B223B;
+
     --card: #FCF6E9;
     --card-foreground: #3B2A1B;
     --popover: #FCF6E9;
@@ -69,7 +77,7 @@
 
     /* Miel / caramelo */
     --amber-gold: #C08A3E;
-    --primary: #8A5A26;
+    --primary: #7A4B1A;
     --primary-foreground: #FDF7EA;
 
     /* Tan */
@@ -82,22 +90,22 @@
     --accent: #EFE3C9;
     --accent-foreground: #3B2A1B;
 
-    --destructive: #A63D24;
+    --destructive: #9B223B;
 
     --border: rgba(94, 66, 38, 0.20);
     --input: rgba(90, 62, 34, 0.25);
-    --ring: #9A6A28;
+    --ring: #8A5A26;
 
     --radius: 0.5rem;
 
     --sidebar: #FCF6E9;
     --sidebar-foreground: #3B2A1B;
-    --sidebar-primary: #8A5A26;
+    --sidebar-primary: #7A4B1A;
     --sidebar-primary-foreground: #FDF7EA;
     --sidebar-accent: #EFE3C9;
     --sidebar-accent-foreground: #3B2A1B;
     --sidebar-border: rgba(94, 66, 38, 0.20);
-    --sidebar-ring: #9A6A28;
+    --sidebar-ring: #8A5A26;
 }
 
 @layer base {

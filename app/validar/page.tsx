@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { isStaffAuthed } from "@/lib/staff";
 import { LoginForm } from "@/components/validar/login-form";
@@ -29,5 +30,15 @@ export default async function ValidarPage() {
     include: { ticketTiers: true },
   });
 
-  return <ValidationPanel eventName={event?.name ?? "Festival"} />;
+  return (
+    <div className="mx-auto flex max-w-3xl flex-col items-end gap-3 px-6 py-8">
+      <Link
+        href="/dashboard"
+        className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground transition-colors hover:text-primary"
+      >
+        Dashboard operativo →
+      </Link>
+      <ValidationPanel eventName={event?.name ?? "Festival"} />
+    </div>
+  );
 }
