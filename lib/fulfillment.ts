@@ -112,7 +112,7 @@ export async function fulfillPurchase(purchaseId: string) {
           ${ageInfo ? `<p>${ageInfo}</p>` : ""}
           <p>Menú: ${dietLabel(t.diet)}</p>
           <p class="code">${t.qrCode}</p>
-          <p>${t.alcoholAllowance > 0 ? `${t.alcoholAllowance} bebidas alcohólicas incluidas` : "Sin bebidas alcohólicas (menor de edad)"}</p>
+          <p>${t.alcoholAllowance > 0 ? `Habilitado para comprar hasta ${t.alcoholAllowance} bebidas alcohólicas en barra` : "Sin acceso a compra de alcohol (menor de edad)"}</p>
         </div>`;
     })
     .join("");
@@ -167,8 +167,8 @@ export async function fulfillPurchase(purchaseId: string) {
               <ul>
                 <li>Presentá el <strong>código QR</strong> adjunto (o tu <strong>DNI</strong>) en la entrada del evento.</li>
                 <li>Cada entrada tiene su propio QR y corresponde a un asistente.</li>
-                <li>Cada mayor de 18 años puede consumir hasta 3 bebidas alcohólicas incluidas.</li>
-                <li>No está permitida la venta ni el consumo de bebidas alcohólicas a menores de edad.</li>
+                <li>Cada entrada para mayor de 18 años habilita la posibilidad de comprar hasta ${DEFAULT_ALCOHOL_ALLOWANCE} bebidas alcohólicas en la barra.</li>
+                <li>No está permitida la venta ni el suministro de bebidas alcohólicas a menores de edad.</li>
               </ul>
               <p>¡Te esperamos!</p>
             </div>

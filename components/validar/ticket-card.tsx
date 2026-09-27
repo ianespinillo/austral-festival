@@ -209,8 +209,8 @@ export function TicketCard({
               )}
               <p className="text-xs font-light text-muted-foreground uppercase tracking-[0.1em]">
                 {ticket.alcoholAllowance > 0
-                  ? `${ticket.alcoholAllowance} consumos incluidos`
-                  : "Sin bebidas alcohólicas"}
+                  ? `Hasta ${ticket.alcoholAllowance} compras de alcohol`
+                  : "Sin compra de alcohol"}
               </p>
             </div>
           </div>
@@ -234,7 +234,7 @@ export function TicketCard({
           <div className="flex items-center justify-between text-xs">
             <span className="flex items-center gap-2 font-serif uppercase tracking-wider text-foreground">
               <Wine className="size-3.5 text-amber-700" strokeWidth={1.5} />
-              Consumos (alcohólicos)
+              Compras de alcohol en barra
             </span>
             <span
               className={limitReached ? "font-semibold text-red-600" : "font-mono font-bold text-foreground"}
@@ -250,15 +250,15 @@ export function TicketCard({
               />
               <p className="text-xs font-light text-muted-foreground">
                 {limitReached
-                  ? `Límite alcanzado (${ticket.maxAlcoholic} consumos).`
-                  : `Quedan ${ticket.alcoholicRemaining} consumos.`}
+                  ? `Límite alcanzado (${ticket.maxAlcoholic} compras registradas).`
+                  : `Puede comprar hasta ${ticket.alcoholicRemaining} bebidas más.`}
                 {ticket.nonAlcoholicServed > 0 &&
                   ` · ${ticket.nonAlcoholicServed} sin alcohol servidas.`}
               </p>
             </>
           ) : (
             <p className="text-xs font-light text-red-400">
-              Este asistente es menor de edad. No puede consumir bebidas alcohólicas.
+              Este asistente es menor de edad. No está habilitado para comprar ni consumir bebidas alcohólicas.
             </p>
           )}
         </div>

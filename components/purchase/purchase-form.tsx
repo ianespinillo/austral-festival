@@ -206,7 +206,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                 <p className="mt-2 text-xs font-normal text-muted-foreground">
                   {soldOut
                     ? "Agotada"
-                    : `Disponibles (${PREVENTA_LABEL}) · cada entrada permite ${DEFAULT_ALCOHOL_ALLOWANCE} bebidas alcohólicas`}
+                    : `Disponibles (${PREVENTA_LABEL}) · habilita la compra de hasta ${DEFAULT_ALCOHOL_ALLOWANCE} bebidas con alcohol para mayores`}
                 </p>
               </div>
               <div className="font-serif text-4xl font-bold text-foreground sm:text-5xl tracking-tight">
@@ -434,8 +434,7 @@ export function PurchaseForm({ tiers }: { tiers: TierOption[] }) {
                   Datos de cada asistente
                 </h4>
                 <p className="text-xs font-normal text-muted-foreground">
-                  Completá los datos de cada persona. Los menores de 18 años no tendrán acceso a
-                  bebidas alcohólicas.
+                  Completá los datos de cada persona. Los mayores de 18 años quedan habilitados para comprar hasta {DEFAULT_ALCOHOL_ALLOWANCE} bebidas alcohólicas en barra (los menores no acceden a la compra de alcohol).
                 </p>
                 {guests.map((guest, i) => (
                   <div

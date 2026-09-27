@@ -243,7 +243,7 @@ export function TicketsTable({ tickets, compact = false }: TicketsTableProps) {
                 <TableHead className="w-[110px]">Edad</TableHead>
                 <TableHead className={compact ? "w-[150px]" : "w-[130px]"}>Dieta</TableHead>
                 <TableHead className="w-[140px]">Estado Puerta</TableHead>
-                <TableHead className="w-[150px]">Bebidas Tomadas</TableHead>
+                <TableHead className="w-[150px]">Bebidas en Barra</TableHead>
                 {!compact && <TableHead>Voluntario / Vendedor</TableHead>}
               </TableRow>
             </TableHeader>
@@ -315,7 +315,7 @@ export function TicketsTable({ tickets, compact = false }: TicketsTableProps) {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2 text-xs font-medium tabular-nums">
-                        <span className="inline-flex items-center gap-1 text-vino font-semibold" title="Bebidas con alcohol consumidas / límite">
+                        <span className="inline-flex items-center gap-1 text-vino font-semibold" title="Bebidas con alcohol compradas / cupo máximo">
                           <Wine className="size-3" /> {ticket.alcoholicDrinksServed}/{ticket.alcoholAllowance}
                         </span>
                         <span className="text-muted-foreground">|</span>

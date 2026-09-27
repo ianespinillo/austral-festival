@@ -410,7 +410,7 @@ export async function serveDrink(
     ) {
       return {
         ok: false,
-        error: `Límite alcanzado: esta persona ya consumió ${ticket.alcoholAllowance} bebidas alcohólicas.`,
+        error: `Límite alcanzado: esta persona ya alcanzó el máximo de ${ticket.alcoholAllowance} compras de bebidas alcohólicas.`,
       };
     }
 

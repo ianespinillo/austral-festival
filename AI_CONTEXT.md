@@ -70,7 +70,7 @@ Notas MongoDB:
 1. `app/page.tsx` lee el primer `Event` activo y sus tiers con stock disponible.
 2. `purchase-form.tsx` valida en cliente y llama a `createCheckoutPreference` (`app/actions.ts:33`):
    - Valida cantidad (1-6), email, DNI (6-10 dígitos), fecha nacimiento, dieta.
-   - Calcula `alcoholAllowance` por asistente: `DEFAULT_ALCOHOL_ALLOWANCE` (3) si es mayor de edad (18+ al momento de comprar), 0 si es menor.
+   - Calcula `alcoholAllowance` por asistente: `DEFAULT_ALCOHOL_ALLOWANCE` (3) si es mayor de edad (habilita la posibilidad de comprar hasta 3 bebidas alcohólicas en barra), 0 si es menor.
    - Crea la `Purchase` con `status: "pending"` y guarda los `guests`.
    - Crea la preferencia en MP con `external_reference = purchase.id`, `notification_url = ${APP_URL}/api/webhooks/mercadopago` y `back_urls` hacia `/compra/exito`.
    - Redirige al `init_point` (en sandbox usa `sandbox_init_point`).

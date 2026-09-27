@@ -167,9 +167,9 @@ export default async function Home() {
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-xs sm:text-sm font-normal leading-relaxed text-foreground/80">
               Pagá con Mercado Pago y recibí tu QR por email al instante.
-              Disponibles en {PREVENTA_LABEL}. Una sola entrada, la que da todo:
-              música, patio de comidas y {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
-              alcohólicas.
+              Disponibles en {PREVENTA_LABEL}. Una sola entrada con acceso completo:
+              música en vivo, patio de comidas y la habilitación para comprar hasta {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
+              con alcohol (exclusivo para mayores de 18 años).
             </p>
           </div>
 
@@ -201,7 +201,7 @@ export default async function Home() {
               </h3>
               <p className="mt-3 text-sm font-normal leading-relaxed text-muted-foreground">
                 Procesado por Mercado Pago, con todos los medios de pago de
-                Argentina. No está permitida la venta a menores de edad.
+                Argentina.
               </p>
             </div>
             <div className="flex flex-col items-center p-8 text-center sm:p-10">
@@ -224,12 +224,11 @@ export default async function Home() {
                 <Wine className="size-6 text-amber-700" strokeWidth={1.5} />
               </div>
               <h3 className="mt-6 font-serif text-base font-bold uppercase tracking-widest text-foreground">
-                {DEFAULT_ALCOHOL_ALLOWANCE} consumos
+                Hasta {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
               </h3>
               <p className="mt-3 text-sm font-normal leading-relaxed text-muted-foreground">
-                Cada entrada incluye {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
-                alcohólicas. Los menores de edad no acceden a bebidas
-                alcohólicas.
+                Cada entrada de mayor de 18 años habilita la posibilidad de comprar hasta {DEFAULT_ALCOHOL_ALLOWANCE} bebidas
+                alcohólicas en la barra del evento. Los menores de edad no acceden a la compra ni consumo de alcohol.
               </p>
             </div>
           </div>

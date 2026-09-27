@@ -183,9 +183,9 @@ export default async function CompraExitosaPage({
                     <Wine className="mt-0.5 size-4 shrink-0 text-amber-700" strokeWidth={1.5} />
                     <p className="text-xs font-normal leading-relaxed text-foreground/80">
                       <strong className="font-semibold text-amber-800 uppercase tracking-wider">
-                        {DEFAULT_ALCOHOL_ALLOWANCE} consumos por entrada.
+                        Compra de bebidas en barra.
                       </strong>{" "}
-                      Los menores de edad no acceden a bebidas alcohólicas.
+                      Cada entrada de mayor de edad habilita la posibilidad de comprar hasta {DEFAULT_ALCOHOL_ALLOWANCE} bebidas alcohólicas. Los menores de 18 años no acceden a la compra de alcohol.
                     </p>
                   </div>
                 )}

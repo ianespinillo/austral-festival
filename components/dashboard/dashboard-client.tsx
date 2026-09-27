@@ -262,7 +262,7 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
         <TabsContent value="tickets" className="space-y-4">
           <TabPageHeader
             title="Control de Acreditaciones y Asistentes"
-            description="Reemplaza la planilla física de puerta. Audita ingresos en tiempo real, verifica mayoría de edad para consumo de alcohol y controla entrega de bebidas."
+            description="Reemplaza la planilla física de puerta. Audita ingresos en tiempo real, verifica mayoría de edad y controla el cupo de compra de bebidas con alcohol en barra."
             badgeText={`${currentData.kpis.totalTicketsCheckedIn} acreditados en predio`}
           />
           <TicketsTable tickets={currentData.tickets} />
