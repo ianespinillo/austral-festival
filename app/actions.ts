@@ -60,6 +60,15 @@ export async function createCheckoutPreference({
       return { ok: false, error: "El email no es válido." };
     }
 
+    // Fetch tier early to know ticketCount before validating guests
+    const tier = await prisma.ticketTier.findUnique({ where: { id: tierId } });
+    if (!tier || !tier.isActive) {
+      return { ok: false, error: "La entrada seleccionada no está disponible." };
+    }
+
+    const ticketCount = tier.ticketCount ?? 1;
+    const totalTickets = qty * ticketCount;
+
     const isDonation = participation === "donacion";
     const parsedGuests: {
       name: string;
@@ -91,7 +100,7 @@ export async function createCheckoutPreference({
         }
       }
     } else {
-      if (!Array.isArray(guests) || guests.length !== qty) {
+      if (!Array.isArray(guests) || guests.length !== totalTickets) {
         return {
           ok: false,
           error: "Completá el DNI y los datos de cada asistente.",
@@ -141,16 +150,14 @@ export async function createCheckoutPreference({
       }
     }
 
-    const tier = await prisma.ticketTier.findUnique({ where: { id: tierId } });
-    if (!tier || !tier.isActive) {
-      return { ok: false, error: "La entrada seleccionada no está disponible." };
-    }
-    const available = tier.maxStock - tier.soldCount;
-    if (available < qty) {
-      return {
-        ok: false,
-        error: `Solo quedan ${available} entradas de este tipo.`,
-      };
+    if (!isDonation) {
+      const available = tier.maxStock - tier.soldCount;
+      if (available < totalTickets) {
+        return {
+          ok: false,
+          error: `Solo quedan ${available} entradas de este tipo.`,
+        };
+      }
     }
 
     const totalAmount = tier.price * qty;
@@ -175,7 +182,9 @@ export async function createCheckoutPreference({
     const preference = await createPreference({
       items: [
         {
-          title: `Entrada ${tier.name} — Peña Folk Austral`,
+          title: isDonation
+            ? `Donación ${qty} ${qty === 1 ? "entrada" : "entradas"} ${tier.name} — Peña Folk Austral`
+            : `Entrada ${tier.name} — Peña Folk Austral`,
           quantity: qty,
           unitPrice: tier.price,
         },

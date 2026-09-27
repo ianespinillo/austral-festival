@@ -43,9 +43,11 @@ export interface VolunteerRanking {
   salesCount: number;
   ticketsCount: number;
   totalAmount: number;
+  averageTicketAmount: number;
+  revenueShare: number;
 }
 
-export interface DietSummary {
+export interface DietCountsDetail {
   regular: number;
   celiaco: number;
   vegetariano: number;
@@ -53,18 +55,61 @@ export interface DietSummary {
   total: number;
 }
 
+export interface DietSummary extends DietCountsDetail {
+  checkedIn: DietCountsDetail;
+}
+
+export interface TierBreakdown {
+  name: string;
+  ticketsSold: number;
+  revenue: number;
+  percentageOfRevenue: number;
+}
+
 export interface DashboardKPIs {
+  // Finanzas
   totalRevenue: number;
-  totalTicketsSold: number;
-  totalTicketsCheckedIn: number;
-  attendanceRate: number;
+  pendingRevenue: number;
+  donationsRevenue: number;
+  donationsCount: number;
+  averageOrderValue: number;
+  totalPurchases: number;
+  paidPurchasesCount: number;
+  pendingPurchasesCount: number;
+  cancelledPurchasesCount: number;
+  refundedPurchasesCount: number;
+  tierBreakdown: TierBreakdown[];
+
+  // Capacidad y Aforo
   totalCapacity: number;
   capacityRate: number;
+  remainingCapacity: number;
+
+  // Asistencia & Puerta
+  totalTicketsSold: number;
+  totalTicketsCheckedIn: number;
+  totalTicketsPending: number;
+  totalTicketsCancelled: number;
+  attendanceRate: number;
+  minorsCount: number;
+  adultsCount: number;
+  minorsCheckedIn: number;
+  adultsCheckedIn: number;
+
+  // Bebidas & Barra
   drinksAlcoholicServed: number;
   drinksNonAlcoholicServed: number;
-  totalPurchases: number;
+  drinksTotalServed: number;
+  drinksAveragePerAttendee: number;
+
+  // Dietas & Cocina
   dietCounts: DietSummary;
+
+  // Canales & Voluntarios
   volunteerRankings: VolunteerRanking[];
+  volunteersTotalRevenue: number;
+  directSalesRevenue: number;
+  volunteersRevenueShare: number;
 }
 
 export interface DashboardData {

@@ -1,10 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Search, CheckCircle2, Clock, Wine, GlassWater, ShieldAlert, Sparkles } from "lucide-react";
-import { DashboardTicket } from "@/lib/dashboard/types";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import {
+  CheckCircle2,
+  Clock,
+  Wine,
+  GlassWater,
+  ShieldAlert,
+  XCircle,
+  Users,
+  UserCheck,
+  Hourglass,
+  Baby,
+} from "lucide-react";
+import { DashboardTicket, TicketStatus } from "@/lib/dashboard/types";
 import {
   Table,
   TableBody,
@@ -13,136 +22,257 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "cn";
+import {
+  SearchInput,
+  SegmentedControl,
+  FilterSelect,
+  SegmentOption,
+} from "./table-controls";
+import { DietBadge } from "./diet-badges";
+import { TablePagination } from "./table-pagination";
 
 interface TicketsTableProps {
   tickets: DashboardTicket[];
+  /** Preview compacto sin controles y con columnas reducidas (para el overview). */
+  compact?: boolean;
 }
 
-export function TicketsTable({ tickets }: TicketsTableProps) {
+type StatusFilter = TicketStatus | "all";
+
+const DIET_OPTIONS = [
+  { value: "all", label: "Todas las dietas" },
+  { value: "regular", label: "Regular" },
+  { value: "celiaco", label: "Celíaco (Sin TACC)" },
+  { value: "vegetariano", label: "Vegetariano" },
+  { value: "sin_carne_viernes", label: "Sin carne viernes" },
+];
+
+const AGE_OPTIONS = [
+  { value: "all", label: "Todas las edades" },
+  { value: "adult", label: "Solo Adultos (+18)" },
+  { value: "minor", label: "Solo Menores (<18)" },
+];
+
+const DEFAULT_PAGE_SIZE = 10;
+
+export function TicketsTable({ tickets, compact = false }: TicketsTableProps) {
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "used" | "active">("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [dietFilter, setDietFilter] = useState<string>("all");
+  const [ageFilter, setAgeFilter] = useState<string>("all");
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredTickets = useMemo(() => {
-    return tickets.filter((t) => {
-      // Filtro de búsqueda
-      const term = search.toLowerCase().trim();
-      const matchesSearch =
-        !term ||
-        t.holderName.toLowerCase().includes(term) ||
-        t.holderDni.includes(term) ||
-        t.qrCode.toLowerCase().includes(term) ||
-        (t.referringVolunteer && t.referringVolunteer.toLowerCase().includes(term)) ||
-        t.buyerName.toLowerCase().includes(term);
+  const handlePageSizeChange = (newSize: number) => {
+    setPageSize(newSize);
+    setCurrentPage(1);
+  };
 
-      // Filtro de estado
-      const matchesStatus =
-        statusFilter === "all" || t.status === statusFilter;
+  const handleSearchChange = (val: string) => {
+    setSearch(val);
+    setCurrentPage(1);
+  };
 
-      // Filtro de dieta
-      const matchesDiet =
-        dietFilter === "all" || t.diet === dietFilter;
+  const handleStatusChange = (val: StatusFilter) => {
+    setStatusFilter(val);
+    setCurrentPage(1);
+  };
 
-      return matchesSearch && matchesStatus && matchesDiet;
-    });
-  }, [tickets, search, statusFilter, dietFilter]);
+  const handleDietChange = (val: string) => {
+    setDietFilter(val);
+    setCurrentPage(1);
+  };
+
+  const handleAgeChange = (val: string) => {
+    setAgeFilter(val);
+    setCurrentPage(1);
+  };
+
+  const totalUsed = tickets.filter((t) => t.status === "used").length;
+  const totalActive = tickets.filter((t) => t.status === "active").length;
+  const totalCancelled = tickets.filter((t) => t.status === "cancelled").length;
+  const totalMinors = tickets.filter((t) => !t.isAdult && t.status !== "cancelled").length;
+
+  const statusOptions: SegmentOption<StatusFilter>[] = [
+    { value: "all", label: "Todos", count: tickets.length },
+    {
+      value: "used",
+      label: "Ingresados",
+      count: totalUsed,
+      activeClassName: "bg-pampa text-white",
+    },
+    {
+      value: "active",
+      label: "Pendientes",
+      count: totalActive,
+      activeClassName: "bg-oro text-amber-950 font-bold",
+    },
+    {
+      value: "cancelled",
+      label: "Cancelados",
+      count: totalCancelled,
+      activeClassName: "bg-foreground text-background",
+    },
+  ];
+
+  const filteredTickets = tickets.filter((t) => {
+    // Búsqueda
+    const term = search.toLowerCase().trim();
+    const matchesSearch =
+      !term ||
+      t.holderName.toLowerCase().includes(term) ||
+      t.holderDni.includes(term) ||
+      t.qrCode.toLowerCase().includes(term) ||
+      (t.referringVolunteer && t.referringVolunteer.toLowerCase().includes(term)) ||
+      t.buyerName.toLowerCase().includes(term);
+
+    // Estado
+    const matchesStatus = statusFilter === "all" || t.status === statusFilter;
+
+    // Dieta
+    const matchesDiet = dietFilter === "all" || t.diet === dietFilter;
+
+    // Edad
+    const matchesAge =
+      ageFilter === "all" ||
+      (ageFilter === "adult" && t.isAdult) ||
+      (ageFilter === "minor" && !t.isAdult);
+
+    return matchesSearch && matchesStatus && matchesDiet && matchesAge;
+  });
+
+  const totalPages = Math.ceil(filteredTickets.length / pageSize) || 1;
+  const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+  const paginatedTickets = compact
+    ? filteredTickets.slice(0, 8)
+    : filteredTickets.slice((safeCurrentPage - 1) * pageSize, safeCurrentPage * pageSize);
+
+  const tableColSpan = compact ? 5 : 7;
 
   return (
     <div className="space-y-4">
+      {/* Franja Informativa de Operación de Puerta */}
+      {!compact && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="rounded-lg border border-border/80 bg-card p-3 shadow-xs">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+              <Users className="size-3.5 text-primary" />
+              <span>Total Emitidas</span>
+            </div>
+            <div className="mt-1 text-2xl font-bold font-sans text-foreground tabular-nums">
+              {tickets.length}
+            </div>
+          </div>
+          <div className="rounded-lg border border-pampa/40 bg-pampa/10 p-3 shadow-xs">
+            <div className="flex items-center gap-2 text-xs text-pampa font-semibold">
+              <UserCheck className="size-3.5" />
+              <span>En el Predio</span>
+            </div>
+            <div className="mt-1 text-2xl font-bold font-sans text-pampa tabular-nums">
+              {totalUsed}{" "}
+              <span className="text-xs font-normal text-muted-foreground">
+                ({tickets.length > 0 ? Math.round((totalUsed / tickets.length) * 100) : 0}%)
+              </span>
+            </div>
+          </div>
+          <div className="rounded-lg border border-oro/40 bg-oro/10 p-3 shadow-xs">
+            <div className="flex items-center gap-2 text-xs text-oro font-semibold">
+              <Hourglass className="size-3.5" />
+              <span>Por Ingresar</span>
+            </div>
+            <div className="mt-1 text-2xl font-bold font-sans text-oro tabular-nums">
+              {totalActive}
+            </div>
+          </div>
+          <div className="rounded-lg border border-border/80 bg-card p-3 shadow-xs">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+              <Baby className="size-3.5 text-amber-700" />
+              <span>Menores de Edad</span>
+            </div>
+            <div className="mt-1 text-2xl font-bold font-sans text-foreground tabular-nums">
+              {totalMinors}{" "}
+              <span className="text-xs font-normal text-muted-foreground">
+                (control en barra)
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Controles de Búsqueda y Filtros */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
+      {!compact && (
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <SearchInput
             placeholder="Buscar por nombre, DNI, QR o voluntario..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-card border-border/80 text-sm"
+            onChange={handleSearchChange}
+            className="w-full lg:max-w-md"
           />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Filtros de estado */}
-          <div className="flex rounded-md border border-border/80 bg-card p-0.5 text-xs">
-            <button
-              onClick={() => setStatusFilter("all")}
-              className={`px-2.5 py-1 rounded transition-colors font-medium ${
-                statusFilter === "all"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Todos ({tickets.length})
-            </button>
-            <button
-              onClick={() => setStatusFilter("used")}
-              className={`px-2.5 py-1 rounded transition-colors font-medium ${
-                statusFilter === "used"
-                  ? "bg-pampa text-white"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Ingresados ({tickets.filter((t) => t.status === "used").length})
-            </button>
-            <button
-              onClick={() => setStatusFilter("active")}
-              className={`px-2.5 py-1 rounded transition-colors font-medium ${
-                statusFilter === "active"
-                  ? "bg-oro text-amber-950 font-bold"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Pendientes ({tickets.filter((t) => t.status === "active").length})
-            </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <SegmentedControl
+              ariaLabel="Filtrar por estado de puerta"
+              options={statusOptions}
+              value={statusFilter}
+              onChange={handleStatusChange}
+            />
+            <FilterSelect
+              ariaLabel="Filtrar por dieta"
+              value={dietFilter}
+              onChange={handleDietChange}
+              options={DIET_OPTIONS}
+            />
+            <FilterSelect
+              ariaLabel="Filtrar por grupo etario"
+              value={ageFilter}
+              onChange={handleAgeChange}
+              options={AGE_OPTIONS}
+            />
           </div>
-
-          {/* Filtro de Dieta */}
-          <select
-            value={dietFilter}
-            onChange={(e) => setDietFilter(e.target.value)}
-            aria-label="Filtrar por dieta"
-            className="h-8 rounded-md border border-border/80 bg-card px-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          >
-            <option value="all">Todas las dietas</option>
-            <option value="regular">Regular</option>
-            <option value="celiaco">Celíaco (Sin TACC)</option>
-            <option value="vegetariano">Vegetariano</option>
-            <option value="sin_carne_viernes">Sin carne viernes</option>
-          </select>
         </div>
-      </div>
+      )}
 
-      {/* Tabla estilo Excel */}
+      {/* Tabla de Asistentes */}
       <div className="rounded-xl border border-border/80 bg-card shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader className="bg-muted/50 text-xs font-bold uppercase tracking-wider text-muted-foreground">
               <TableRow>
-                <TableHead className="w-[140px]">Código QR</TableHead>
+                {!compact && <TableHead className="w-[130px]">Código QR</TableHead>}
                 <TableHead>Asistente / DNI</TableHead>
-                <TableHead className="w-[100px]">Edad</TableHead>
-                <TableHead className="w-[130px]">Dieta</TableHead>
-                <TableHead className="w-[130px]">Estado Puerta</TableHead>
+                <TableHead className="w-[110px]">Edad</TableHead>
+                <TableHead className={compact ? "w-[150px]" : "w-[130px]"}>Dieta</TableHead>
+                <TableHead className="w-[140px]">Estado Puerta</TableHead>
                 <TableHead className="w-[150px]">Bebidas Tomadas</TableHead>
-                <TableHead>Voluntario / Vendedor</TableHead>
+                {!compact && <TableHead>Voluntario / Vendedor</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody className="text-sm">
-              {filteredTickets.length === 0 ? (
+              {paginatedTickets.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
+                  <TableCell colSpan={tableColSpan} className="h-32 text-center text-muted-foreground">
                     No se encontraron asistentes con los filtros seleccionados.
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredTickets.map((ticket) => (
-                  <TableRow key={ticket.id} className="hover:bg-muted/30 transition-colors">
-                    <TableCell className="font-mono text-xs font-semibold text-primary">
-                      {ticket.qrCode}
-                    </TableCell>
+                paginatedTickets.map((ticket) => (
+                  <TableRow
+                    key={ticket.id}
+                    className={cn(
+                      "hover:bg-muted/30 transition-colors",
+                      ticket.status === "cancelled" && "opacity-60 bg-muted/20"
+                    )}
+                  >
+                    {!compact && (
+                      <TableCell className="font-mono text-xs font-semibold text-primary">
+                        {ticket.qrCode}
+                      </TableCell>
+                    )}
                     <TableCell>
                       <div className="font-semibold text-foreground">{ticket.holderName}</div>
-                      <div className="text-xs text-muted-foreground">DNI: {ticket.holderDni}</div>
+                      <div className="text-xs text-muted-foreground">
+                        DNI: {ticket.holderDni} · {ticket.tierName}
+                      </div>
                     </TableCell>
                     <TableCell>
                       {ticket.isAdult ? (
@@ -150,30 +280,13 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
                           +18 Adulto
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 text-xs font-bold text-amber-800 dark:text-amber-300">
-                          <ShieldAlert className="size-3" /> Menor
+                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900 border border-amber-300">
+                          <ShieldAlert className="size-3 text-amber-700" /> Menor
                         </span>
                       )}
                     </TableCell>
                     <TableCell>
-                      {ticket.diet === "celiaco" && (
-                        <Badge variant="outline" className="border-amber-400 bg-amber-50 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 gap-1 font-medium">
-                          <Sparkles className="size-3" /> Celíaco
-                        </Badge>
-                      )}
-                      {ticket.diet === "vegetariano" && (
-                        <Badge variant="outline" className="border-pampa/50 bg-pampa/10 text-pampa font-medium">
-                          Vegetariano
-                        </Badge>
-                      )}
-                      {ticket.diet === "sin_carne_viernes" && (
-                        <Badge variant="outline" className="border-cielo/50 bg-cielo/10 text-sky-800 dark:text-cielo font-medium">
-                          Sin carne vier.
-                        </Badge>
-                      )}
-                      {ticket.diet === "regular" && (
-                        <span className="text-xs text-muted-foreground">Regular</span>
-                      )}
+                      <DietBadge diet={ticket.diet} />
                     </TableCell>
                     <TableCell>
                       {ticket.status === "used" ? (
@@ -182,7 +295,7 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
                             <CheckCircle2 className="size-3.5" /> Ingresó
                           </span>
                           {ticket.checkedInAt && (
-                            <span className="text-[11px] text-muted-foreground">
+                            <span className="text-[11px] text-muted-foreground font-mono">
                               {new Date(ticket.checkedInAt).toLocaleTimeString("es-AR", {
                                 hour: "2-digit",
                                 minute: "2-digit",
@@ -190,6 +303,10 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
                             </span>
                           )}
                         </div>
+                      ) : ticket.status === "cancelled" ? (
+                        <span className="inline-flex items-center gap-1 font-medium text-xs text-muted-foreground">
+                          <XCircle className="size-3.5 text-vino" /> Cancelado
+                        </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 font-medium text-xs text-muted-foreground">
                           <Clock className="size-3.5 text-oro" /> No ingresó
@@ -197,27 +314,45 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
                       )}
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2 text-xs font-medium">
-                        <span className="inline-flex items-center gap-1 text-vino" title="Bebidas con alcohol">
+                      <div className="flex items-center gap-2 text-xs font-medium tabular-nums">
+                        <span className="inline-flex items-center gap-1 text-vino font-semibold" title="Bebidas con alcohol consumidas / límite">
                           <Wine className="size-3" /> {ticket.alcoholicDrinksServed}/{ticket.alcoholAllowance}
                         </span>
                         <span className="text-muted-foreground">|</span>
-                        <span className="inline-flex items-center gap-1 text-sky-700 dark:text-cielo" title="Bebidas sin alcohol">
+                        <span className="inline-flex items-center gap-1 text-cielo font-semibold" title="Bebidas sin alcohol">
                           <GlassWater className="size-3" /> {ticket.nonAlcoholicDrinksServed}
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <span className="text-xs font-medium text-foreground">
-                        {ticket.referringVolunteer || "Venta Directa"}
-                      </span>
-                    </TableCell>
+                    {!compact && (
+                      <TableCell>
+                        <span className="text-xs font-medium text-foreground">
+                          {ticket.referringVolunteer || "Venta Directa"}
+                        </span>
+                        <div className="text-[11px] text-muted-foreground">
+                          Compró: {ticket.buyerName}
+                        </div>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))
               )}
             </TableBody>
           </Table>
         </div>
+
+        {/* Paginación */}
+        {!compact && (
+          <TablePagination
+            currentPage={safeCurrentPage}
+            totalPages={totalPages}
+            totalItems={filteredTickets.length}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={handlePageSizeChange}
+            itemName="asistentes"
+          />
+        )}
       </div>
     </div>
   );

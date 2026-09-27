@@ -583,44 +583,127 @@ export function calculateKPIs(
   totalCapacity: number = 300
 ): DashboardKPIs {
   const paidPurchases = purchases.filter((p) => p.status === "paid");
+  const pendingPurchases = purchases.filter((p) => p.status === "pending");
+  const cancelledPurchases = purchases.filter((p) => p.status === "cancelled");
+  const refundedPurchases = purchases.filter((p) => p.status === "refunded");
+
   const totalRevenue = paidPurchases.reduce((acc, p) => acc + p.totalAmount, 0);
-  const totalTicketsSold = tickets.length;
-  const totalTicketsCheckedIn = tickets.filter((t) => t.status === "used").length;
+  const pendingRevenue = pendingPurchases.reduce((acc, p) => acc + p.totalAmount, 0);
+
+  const donationPurchases = paidPurchases.filter((p) => p.buyerParticipation === "donacion");
+  const donationsRevenue = donationPurchases.reduce((acc, p) => acc + p.totalAmount, 0);
+  const donationsCount = donationPurchases.length;
+
+  const averageOrderValue =
+    paidPurchases.length > 0 ? Math.round(totalRevenue / paidPurchases.length) : 0;
+
+  // Tickets
+  const activeTickets = tickets.filter((t) => t.status === "active");
+  const checkedInTickets = tickets.filter((t) => t.status === "used");
+  const cancelledTickets = tickets.filter((t) => t.status === "cancelled");
+  const nonCancelledTickets = tickets.filter((t) => t.status !== "cancelled");
+
+  const totalTicketsSold = nonCancelledTickets.length;
+  const totalTicketsCheckedIn = checkedInTickets.length;
+  const totalTicketsPending = activeTickets.length;
+  const totalTicketsCancelled = cancelledTickets.length;
+
+  const capacityRate =
+    totalCapacity > 0 ? Math.min(100, Math.round((totalTicketsSold / totalCapacity) * 100)) : 0;
+  const remainingCapacity = Math.max(0, totalCapacity - totalTicketsSold);
   const attendanceRate =
     totalTicketsSold > 0 ? Math.round((totalTicketsCheckedIn / totalTicketsSold) * 100) : 0;
-  const capacityRate =
-    totalCapacity > 0 ? Math.round((totalTicketsSold / totalCapacity) * 100) : 0;
 
+  // Edades
+  const minorsCount = nonCancelledTickets.filter((t) => !t.isAdult).length;
+  const adultsCount = nonCancelledTickets.filter((t) => t.isAdult).length;
+  const minorsCheckedIn = checkedInTickets.filter((t) => !t.isAdult).length;
+  const adultsCheckedIn = checkedInTickets.filter((t) => t.isAdult).length;
+
+  // Consumos
   let drinksAlcoholicServed = 0;
   let drinksNonAlcoholicServed = 0;
 
+  // Dietas con desglose de presentes
   const dietCounts = {
     regular: 0,
     celiaco: 0,
     vegetariano: 0,
     sin_carne_viernes: 0,
-    total: tickets.length,
+    total: nonCancelledTickets.length,
+    checkedIn: {
+      regular: 0,
+      celiaco: 0,
+      vegetariano: 0,
+      sin_carne_viernes: 0,
+      total: checkedInTickets.length,
+    },
   };
 
   for (const ticket of tickets) {
     drinksAlcoholicServed += ticket.alcoholicDrinksServed;
     drinksNonAlcoholicServed += ticket.nonAlcoholicDrinksServed;
 
-    if (ticket.diet in dietCounts) {
-      dietCounts[ticket.diet as keyof typeof dietCounts]++;
-    } else {
-      dietCounts.regular++;
+    if (ticket.status !== "cancelled") {
+      const d =
+        ticket.diet in dietCounts
+          ? (ticket.diet as "celiaco" | "vegetariano" | "sin_carne_viernes" | "regular")
+          : "regular";
+      dietCounts[d]++;
+
+      if (ticket.status === "used") {
+        dietCounts.checkedIn[d]++;
+      }
     }
   }
 
-  // Ranking de voluntarios
+  const drinksTotalServed = drinksAlcoholicServed + drinksNonAlcoholicServed;
+  const drinksAveragePerAttendee =
+    totalTicketsCheckedIn > 0
+      ? Number((drinksTotalServed / totalTicketsCheckedIn).toFixed(1))
+      : 0;
+
+  // Desglose de Tiers
+  const tierMap = new Map<string, { ticketsSold: number; revenue: number }>();
+  for (const p of paidPurchases) {
+    const tier = p.tierName || "General";
+    const current = tierMap.get(tier) || { ticketsSold: 0, revenue: 0 };
+    current.ticketsSold += p.quantity;
+    current.revenue += p.totalAmount;
+    tierMap.set(tier, current);
+  }
+  const tierBreakdown = Array.from(tierMap.entries())
+    .map(([name, stats]) => ({
+      name,
+      ticketsSold: stats.ticketsSold,
+      revenue: stats.revenue,
+      percentageOfRevenue:
+        totalRevenue > 0 ? Math.round((stats.revenue / totalRevenue) * 100) : 0,
+    }))
+    .sort((a, b) => b.revenue - a.revenue);
+
+  // Ranking y canales de voluntarios
   const volunteerMap = new Map<
     string,
     { salesCount: number; ticketsCount: number; totalAmount: number }
   >();
 
+  let volunteersTotalRevenue = 0;
+  let directSalesRevenue = 0;
+
   for (const p of paidPurchases) {
-    const vol = p.referringVolunteer?.trim() || "Venta Directa";
+    const isDirect =
+      !p.referringVolunteer ||
+      p.referringVolunteer.trim().toLowerCase() === "venta directa" ||
+      p.referringVolunteer.trim().toLowerCase() === "directa";
+    const vol = isDirect ? "Venta Directa" : p.referringVolunteer!.trim();
+
+    if (isDirect) {
+      directSalesRevenue += p.totalAmount;
+    } else {
+      volunteersTotalRevenue += p.totalAmount;
+    }
+
     const current = volunteerMap.get(vol) || {
       salesCount: 0,
       ticketsCount: 0,
@@ -636,21 +719,48 @@ export function calculateKPIs(
     .map(([name, stats]) => ({
       name,
       ...stats,
+      averageTicketAmount:
+        stats.salesCount > 0 ? Math.round(stats.totalAmount / stats.salesCount) : 0,
+      revenueShare: totalRevenue > 0 ? Math.round((stats.totalAmount / totalRevenue) * 100) : 0,
     }))
     .sort((a, b) => b.totalAmount - a.totalAmount);
 
+  const volunteersRevenueShare =
+    totalRevenue > 0 ? Math.round((volunteersTotalRevenue / totalRevenue) * 100) : 0;
+
   return {
     totalRevenue,
-    totalTicketsSold,
-    totalTicketsCheckedIn,
-    attendanceRate,
+    pendingRevenue,
+    donationsRevenue,
+    donationsCount,
+    averageOrderValue,
+    totalPurchases: paidPurchases.length,
+    paidPurchasesCount: paidPurchases.length,
+    pendingPurchasesCount: pendingPurchases.length,
+    cancelledPurchasesCount: cancelledPurchases.length,
+    refundedPurchasesCount: refundedPurchases.length,
+    tierBreakdown,
     totalCapacity,
     capacityRate,
+    remainingCapacity,
+    totalTicketsSold,
+    totalTicketsCheckedIn,
+    totalTicketsPending,
+    totalTicketsCancelled,
+    attendanceRate,
+    minorsCount,
+    adultsCount,
+    minorsCheckedIn,
+    adultsCheckedIn,
     drinksAlcoholicServed,
     drinksNonAlcoholicServed,
-    totalPurchases: paidPurchases.length,
+    drinksTotalServed,
+    drinksAveragePerAttendee,
     dietCounts,
     volunteerRankings,
+    volunteersTotalRevenue,
+    directSalesRevenue,
+    volunteersRevenueShare,
   };
 }
 

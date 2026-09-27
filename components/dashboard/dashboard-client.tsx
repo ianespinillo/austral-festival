@@ -12,12 +12,13 @@ import {
   CreditCard,
   UtensilsCrossed,
   Trophy,
+  UserCheck,
 } from "lucide-react";
 import { toast } from "sonner";
 import { DashboardData } from "@/lib/dashboard/types";
 import { getMockDashboardData } from "@/lib/dashboard/mock-data";
 import { exportPurchasesToCSV, exportTicketsToCSV } from "@/lib/dashboard/export-utils";
-import { KPICards } from "./kpi-cards";
+import { DashboardOverview } from "./dashboard-overview";
 import { TicketsTable } from "./tickets-table";
 import { PurchasesTable } from "./purchases-table";
 import { CateringSummary } from "./catering-summary";
@@ -29,10 +30,36 @@ interface DashboardClientProps {
   initialData: DashboardData;
 }
 
+/** Encabezado unificado de página dentro de cada tab (tipografía display). */
+function TabPageHeader({
+  title,
+  description,
+  badgeText,
+}: {
+  title: string;
+  description: string;
+  badgeText?: string;
+}) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-border/60 pb-3">
+      <div className="flex flex-col gap-1">
+        <h2 className="text-xl font-bold font-sans text-foreground tracking-tight">{title}</h2>
+        <p className="max-w-2xl text-xs text-muted-foreground">{description}</p>
+      </div>
+      {badgeText && (
+        <span className="self-start sm:self-center inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+          {badgeText}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export function DashboardClient({ initialData }: DashboardClientProps) {
   const [useMock, setUseMock] = useState<boolean>(initialData.isMockData);
-  const mockData = getMockDashboardData();
+  const [activeTab, setActiveTab] = useState<string>("overview");
 
+  const mockData = getMockDashboardData();
   const currentData = useMock ? mockData : initialData;
 
   const handleExportTickets = () => {
@@ -55,16 +82,16 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
       {/* Encabezado principal */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-border/80 pb-6">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="grid size-9 place-items-center rounded-lg bg-primary text-primary-foreground">
+          <div className="flex items-center gap-2.5">
+            <span className="grid size-9 place-items-center rounded-lg bg-primary text-primary-foreground shadow-xs">
               <LayoutDashboard className="size-5" />
             </span>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display tracking-tight text-foreground">
-              Dashboard Operativo y Financiero
+            <h1 className="text-2xl sm:text-3xl font-bold font-sans tracking-tight text-foreground">
+              Dashboard de Gestión Operativa
             </h1>
           </div>
-          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1 font-medium text-foreground">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1 font-semibold text-foreground">
               {currentData.eventName}
             </span>
             <span className="flex items-center gap-1">
@@ -81,17 +108,31 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
               {currentData.eventVenue}
             </span>
           </div>
+
+          {/* Badges de estado rápido */}
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-pampa/15 text-pampa px-2.5 py-0.5 rounded-full border border-pampa/30">
+              <UserCheck className="size-3" />
+              {currentData.kpis.totalTicketsCheckedIn} en el predio ({currentData.kpis.attendanceRate}% asistencia)
+            </span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-oro/15 text-oro px-2.5 py-0.5 rounded-full border border-oro/30">
+              {currentData.kpis.remainingCapacity} cupos disponibles ({currentData.kpis.capacityRate}% cubierto)
+            </span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-primary/10 text-primary px-2.5 py-0.5 rounded-full border border-primary/20">
+              {currentData.kpis.totalPurchases} órdenes confirmadas
+            </span>
+          </div>
         </div>
 
         {/* Acciones globales */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
           {/* Switch Data Source */}
           <div className="flex items-center rounded-lg border border-border/80 bg-muted/60 p-1 text-xs">
             <button
               onClick={() => handleToggleSource(false)}
               className={`flex items-center gap-1 px-3 py-1.5 rounded-md font-medium transition-colors ${
                 !useMock
-                  ? "bg-card text-foreground shadow-xs"
+                  ? "bg-card text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -107,7 +148,7 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
               }`}
             >
               <Layers className="size-3.5" />
-              Datos Mockeados MVP
+              Datos Mock MVP
             </button>
           </div>
 
@@ -117,7 +158,7 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
               variant="outline"
               size="sm"
               onClick={handleExportTickets}
-              className="border-border/80 text-xs font-semibold gap-1.5 bg-card"
+              className="border-border/80 text-xs font-semibold gap-1.5 bg-card hover:bg-muted/50"
             >
               <Download className="size-3.5 text-pampa" />
               Asistentes (CSV)
@@ -126,7 +167,7 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
               variant="outline"
               size="sm"
               onClick={handleExportPurchases}
-              className="border-border/80 text-xs font-semibold gap-1.5 bg-card"
+              className="border-border/80 text-xs font-semibold gap-1.5 bg-card hover:bg-muted/50"
             >
               <Download className="size-3.5 text-primary" />
               Ventas (CSV)
@@ -137,18 +178,23 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
 
       {/* Banner informativo si está en modo mock */}
       {useMock && (
-        <div className="flex items-center justify-between rounded-lg border border-oro/40 bg-oro/15 px-4 py-2.5 text-xs text-amber-950 dark:text-amber-200">
-          <div className="flex items-center gap-2">
-            <span className="grid size-5 place-items-center rounded-full bg-oro text-amber-950 font-bold text-[11px]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-[#D4A359] bg-[#FFF8EB] p-4 text-xs shadow-xs">
+          <div className="flex items-center gap-3">
+            <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#8F5B00] text-white font-bold text-xs shadow-xs">
               i
             </span>
-            <span>
-              <strong>Modo Demostración Activo:</strong> Visualizando {currentData.tickets.length} entradas y {currentData.purchases.length} compras de prueba para previsualizar todas las métricas operativas.
-            </span>
+            <div className="text-[#3B2A1B] leading-relaxed">
+              <span className="font-bold text-[#643E08] mr-1">
+                Modo Demostración Activo:
+              </span>
+              <span className="text-[#4A3726]">
+                Visualizando {currentData.tickets.length} entradas y {currentData.purchases.length} compras de prueba para auditoría y simulación en tiempo real.
+              </span>
+            </div>
           </div>
           <button
             onClick={() => handleToggleSource(false)}
-            className="underline font-semibold hover:opacity-80 ml-2 whitespace-nowrap"
+            className="inline-flex items-center justify-center shrink-0 rounded-lg bg-[#7A4B1A] px-3.5 py-1.5 text-xs font-semibold text-[#FCF6E9] shadow-xs hover:bg-[#633B12] transition-colors"
           >
             Ver datos reales de DB
           </button>
@@ -156,134 +202,99 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
       )}
 
       {/* Navegación por Tabs */}
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="bg-muted/70 p-1 border border-border/60 flex flex-wrap h-auto gap-1">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="w-full flex flex-wrap sm:flex-nowrap items-stretch gap-1.5 group-data-horizontal/tabs:!h-auto p-1.5 bg-card/90 border border-border/80 rounded-xl shadow-xs overflow-x-auto">
           <TabsTrigger
             value="overview"
-            className="data-[state=active]:bg-card data-[state=active]:text-primary font-medium text-xs sm:text-sm gap-1.5"
+            className="group/tab !h-auto flex-1 min-w-[130px] justify-center px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all data-active:!bg-primary data-active:!text-primary-foreground data-active:!shadow-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-2 border border-transparent"
           >
-            <LayoutDashboard className="size-4" />
-            Resumen & KPIs
+            <LayoutDashboard className="size-4 shrink-0" />
+            <span>Visión General</span>
           </TabsTrigger>
           <TabsTrigger
             value="tickets"
-            className="data-[state=active]:bg-card data-[state=active]:text-primary font-medium text-xs sm:text-sm gap-1.5"
+            className="group/tab !h-auto flex-1 min-w-[170px] justify-center px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all data-active:!bg-primary data-active:!text-primary-foreground data-active:!shadow-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-2 border border-transparent"
           >
-            <Users className="size-4" />
-            Asistentes / Puerta ({currentData.tickets.length})
+            <Users className="size-4 shrink-0" />
+            <span>Acreditaciones</span>
+            <span className="rounded-full px-2 py-0.5 text-[11px] font-bold bg-muted/80 text-muted-foreground group-data-active/tab:!bg-white/20 group-data-active/tab:!text-white">
+              {currentData.tickets.length}
+            </span>
           </TabsTrigger>
           <TabsTrigger
             value="purchases"
-            className="data-[state=active]:bg-card data-[state=active]:text-primary font-medium text-xs sm:text-sm gap-1.5"
+            className="group/tab !h-auto flex-1 min-w-[150px] justify-center px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all data-active:!bg-primary data-active:!text-primary-foreground data-active:!shadow-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-2 border border-transparent"
           >
-            <CreditCard className="size-4" />
-            Ventas & Finanzas ({currentData.purchases.length})
+            <CreditCard className="size-4 shrink-0" />
+            <span>Finanzas</span>
+            <span className="rounded-full px-2 py-0.5 text-[11px] font-bold bg-muted/80 text-muted-foreground group-data-active/tab:!bg-white/20 group-data-active/tab:!text-white">
+              {currentData.purchases.length}
+            </span>
           </TabsTrigger>
           <TabsTrigger
             value="catering"
-            className="data-[state=active]:bg-card data-[state=active]:text-primary font-medium text-xs sm:text-sm gap-1.5"
+            className="group/tab !h-auto flex-1 min-w-[170px] justify-center px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all data-active:!bg-primary data-active:!text-primary-foreground data-active:!shadow-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-2 border border-transparent"
           >
-            <UtensilsCrossed className="size-4" />
-            Cocina & Dietas
+            <UtensilsCrossed className="size-4 shrink-0" />
+            <span>Cocina & Dietas</span>
+            <span className="rounded-full px-2 py-0.5 text-[11px] font-bold bg-muted/80 text-muted-foreground group-data-active/tab:!bg-white/20 group-data-active/tab:!text-white">
+              {currentData.kpis.dietCounts.total}
+            </span>
           </TabsTrigger>
           <TabsTrigger
             value="volunteers"
-            className="data-[state=active]:bg-card data-[state=active]:text-primary font-medium text-xs sm:text-sm gap-1.5"
+            className="group/tab !h-auto flex-1 min-w-[140px] justify-center px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all data-active:!bg-primary data-active:!text-primary-foreground data-active:!shadow-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-2 border border-transparent"
           >
-            <Trophy className="size-4" />
-            Voluntarios
+            <Trophy className="size-4 shrink-0" />
+            <span>Voluntarios</span>
+            <span className="rounded-full px-2 py-0.5 text-[11px] font-bold bg-muted/80 text-muted-foreground group-data-active/tab:!bg-white/20 group-data-active/tab:!text-white">
+              {currentData.kpis.volunteerRankings.length}
+            </span>
           </TabsTrigger>
         </TabsList>
 
-        {/* Tab 1: Resumen y KPIs */}
+        {/* Tab 1: Visión General (Overview separado y rico en métricas) */}
         <TabsContent value="overview" className="space-y-6">
-          <KPICards kpis={currentData.kpis} />
-
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* Resumen de Puerta en Vivo */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h2 className="text-base font-bold text-foreground flex items-center gap-1.5">
-                  <Users className="size-4 text-pampa" />
-                  Últimos Ingresos en Puerta
-                </h2>
-                <span className="text-xs text-muted-foreground font-medium">
-                  {currentData.kpis.totalTicketsCheckedIn} de {currentData.kpis.totalTicketsSold} presentes
-                </span>
-              </div>
-              <TicketsTable tickets={currentData.tickets.slice(0, 8)} />
-            </div>
-
-            {/* Resumen de Dietas y Voluntarios */}
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <h2 className="text-base font-bold text-foreground flex items-center gap-1.5">
-                  <UtensilsCrossed className="size-4 text-oro" />
-                  Demandas de Cocina
-                </h2>
-                <CateringSummary dietCounts={currentData.kpis.dietCounts} tickets={currentData.tickets} />
-              </div>
-            </div>
-          </div>
+          <DashboardOverview data={currentData} onSelectTab={setActiveTab} />
         </TabsContent>
 
         {/* Tab 2: Asistentes y Puerta completa */}
         <TabsContent value="tickets" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-bold font-display text-foreground">
-                Control de Acreditaciones y Asistentes
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                Reemplaza la planilla de puerta física. Permite auditar ingresos en tiempo real, mayoría de edad y consumición de bebidas.
-              </p>
-            </div>
-          </div>
+          <TabPageHeader
+            title="Control de Acreditaciones y Asistentes"
+            description="Reemplaza la planilla física de puerta. Audita ingresos en tiempo real, verifica mayoría de edad para consumo de alcohol y controla entrega de bebidas."
+            badgeText={`${currentData.kpis.totalTicketsCheckedIn} acreditados en predio`}
+          />
           <TicketsTable tickets={currentData.tickets} />
         </TabsContent>
 
         {/* Tab 3: Ventas y Finanzas completa */}
         <TabsContent value="purchases" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-bold font-display text-foreground">
-                Registro de Ventas, Pagos y Donaciones
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                Reemplaza el libro de tesorería. Detalle de órdenes con id de pago MercadoPago y canal de venta referente.
-              </p>
-            </div>
-          </div>
+          <TabPageHeader
+            title="Registro de Ventas, Pagos y Donaciones"
+            description="Reemplaza el libro de tesorería. Detalle de órdenes con id de pago MercadoPago, desglose por ticket y canal de venta referente."
+            badgeText={`${currentData.kpis.paidPurchasesCount} órdenes pagadas`}
+          />
           <PurchasesTable purchases={currentData.purchases} />
         </TabsContent>
 
         {/* Tab 4: Cocina y Dietas */}
         <TabsContent value="catering" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-bold font-display text-foreground">
-                Planificación de Cocina y Menú Especial
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                Conteo para los proveedores de alimentos y nómina de comensales con celiaquía o requerimientos específicos.
-              </p>
-            </div>
-          </div>
+          <TabPageHeader
+            title="Planificación de Cocina, Buffet y Menús Especiales"
+            description="Conteo para los proveedores de alimentos y nómina de comensales con celiaquía (Sin TACC), dietas vegetarianas o vigilia de viernes."
+            badgeText={`${currentData.kpis.dietCounts.checkedIn.celiaco + currentData.kpis.dietCounts.checkedIn.vegetariano + currentData.kpis.dietCounts.checkedIn.sin_carne_viernes} especiales ya en sala`}
+          />
           <CateringSummary dietCounts={currentData.kpis.dietCounts} tickets={currentData.tickets} />
         </TabsContent>
 
         {/* Tab 5: Ranking de Voluntarios */}
         <TabsContent value="volunteers" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-bold font-display text-foreground">
-                Desempeño de Voluntarios y Referentes
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                Total de ventas y recaudación aportada por cada embajador de la peña.
-              </p>
-            </div>
-          </div>
+          <TabPageHeader
+            title="Desempeño de Voluntarios y Embajadores"
+            description="Total de ventas, recaudación y aporte sobre el total de fondos generados por cada voluntario referente de la peña."
+            badgeText={`${currentData.kpis.volunteersRevenueShare}% recaudado por red`}
+          />
           <VolunteersRanking rankings={currentData.kpis.volunteerRankings} />
         </TabsContent>
       </Tabs>

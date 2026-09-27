@@ -19,16 +19,17 @@ model Event {
 }
 
 model TicketTier {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  eventId   String   @db.ObjectId
-  event     Event    @relation(fields: [eventId], references: [id])
-  name      String
-  price     Float
-  maxStock  Int
-  soldCount Int      @default(0)
-  isActive  Boolean  @default(true)
-  purchases Purchase[]
-  tickets   Ticket[]
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  eventId     String     @db.ObjectId
+  event       Event      @relation(fields: [eventId], references: [id])
+  name        String
+  price       Float
+  ticketCount Int        @default(1) // tickets generated per unit sold (e.g. 6 for a family pack)
+  maxStock    Int
+  soldCount   Int        @default(0)
+  isActive    Boolean    @default(true)
+  purchases   Purchase[]
+  tickets     Ticket[]
 }
 
 model Purchase {
