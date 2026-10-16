@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import { createCheckoutPreference } from "@/app/actions";
 import { DIET_OPTIONS, dietLabel } from "@/lib/diet";
 import { DEFAULT_ALCOHOL_ALLOWANCE, PREVENTA_LABEL } from "@/lib/config";
 import { cn } from "@/lib/utils";
+import { savePurchaseDraft, takePurchaseDraft } from "@/lib/purchase-draft";
 import {
   Loader2,
   Music,
@@ -107,7 +108,61 @@ export function PurchaseForm({
   const [guests, setGuests] = useState<GuestInput[]>([makeEmptyGuest()]);
   const [loading, setLoading] = useState(false);
 
-  const tier = tiers.find((t) => t.id === selectedTierId) ?? individualTier;
+  // Al volver de Mercado Pago sin pagar (botón "atrás" del navegador o
+  // back_url de cancelación), restaurar los datos cargados y avisar.
+  useEffect(() => {
+    function restoreCancelledCheckout() {
+      const url = new URL(window.location.href);
+      const cancelledByMp = url.searchParams.get("pago") === "cancelado";
+      const draft = takePurchaseDraft();
+      if (!draft && !cancelledByMp) return;
+
+      if (draft) {
+        const fallbackTier = tiers.find((t) => t.ticketCount === 1) ?? tiers[0];
+        const restoredTier =
+          tiers.find((t) => t.id === draft.selectedTierId) ?? fallbackTier;
+        const restoredQty =
+          (restoredTier?.ticketCount ?? 1) > 1
+            ? 1
+            : Math.min(Math.max(Math.floor(draft.quantity) || 1, 1), 6);
+
+        setSelectedTierId(restoredTier?.id ?? "");
+        setQuantity(restoredQty);
+        setBuyerName(draft.buyerName ?? "");
+        setBuyerEmail(draft.buyerEmail ?? "");
+        setParticipation(draft.participation === "donacion" ? "donacion" : "asistir");
+        setReferringVolunteer(draft.referringVolunteer ?? "");
+        setGuests(
+          resizeGuests(
+            Array.isArray(draft.guests) ? draft.guests : [],
+            restoredQty * (restoredTier?.ticketCount ?? 1)
+          )
+        );
+      }
+      setLoading(false);
+
+      if (cancelledByMp) {
+        url.searchParams.delete("pago");
+        window.history.replaceState(window.history.state, "", url);
+      }
+
+      toast.dismiss();
+      toast.warning("Se canceló la transacción", { id: "pago-cancelado" });
+      document.getElementById("entradas")?.scrollIntoView({ block: "start" });
+    }
+
+    restoreCancelledCheckout();
+
+    // Si el navegador restaura la página desde el bfcache, el efecto no se
+    // vuelve a montar: escuchamos pageshow para detectar ese "atrás".
+    function handlePageShow(event: PageTransitionEvent) {
+      if (event.persisted) restoreCancelledCheckout();
+    }
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, [tiers]);
+
+  const tier =tiers.find((t) => t.id === selectedTierId) ?? individualTier;
   const isPack = (tier?.ticketCount ?? 1) > 1;
   const effectiveQty = isPack ? 1 : quantity;
   const totalTickets = effectiveQty * (tier?.ticketCount ?? 1);
@@ -178,6 +233,15 @@ export function PurchaseForm({
         toast.error(result.error ?? "Ocurrió un error.");
         return;
       }
+      savePurchaseDraft({
+        selectedTierId: tier.id,
+        quantity: effectiveQty,
+        buyerName,
+        buyerEmail,
+        participation,
+        referringVolunteer,
+        guests,
+      });
       if (result.data.initPoint.startsWith("http")) {
         window.location.href = result.data.initPoint;
       } else {

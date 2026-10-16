@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ReconcilePoller } from "@/components/purchase/reconcile-poller";
+import { ClearPurchaseDraft } from "@/components/purchase/clear-purchase-draft";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -60,6 +61,7 @@ export default async function CompraExitosaPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-20">
+      <ClearPurchaseDraft />
       <Card className="border border-border bg-[#FCF6E9] text-foreground shadow-2xl">
         <CardContent className="flex flex-col items-center gap-6 py-12 text-center">
           <div className="grid size-16 place-items-center rounded-full border border-amber-600/40 bg-amber-500/15 text-amber-800">
